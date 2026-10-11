@@ -111,18 +111,23 @@ function resetEnvelope(){
   $("#seal-btn").setAttribute("aria-expanded","false");
   $("#envelope-status").textContent="Sealed with love 💌";
 }
-/* Typing animation — chunked per frame for butter-smooth typing */
-let typeTimer=null;
-function startTyping(){
+/* Typing animation — chunked per frame, NEVER restarts on its own */
+let typeTimer=null, typingDone=false, typingActive=false;
+function startTyping(force){
   const box=$("#typed-letter"), caret=$("#typing-caret");
   if(!box) return;
+  // Once the letter has fully typed, leave it alone unless user hits ↻ Replay
+  if(typingDone && !force) return;
+  // Don't restart mid-typing (e.g. scroll snap-back re-calling goDeck)
+  if(typingActive && !force) return;
+  typingActive=true; typingDone=false;
   cancelAnimationFrame(typeTimer); box.textContent=""; if(caret) caret.classList.remove("done");
-  if(reduceMotion){ box.textContent=CONFIG.letterText; if(caret) caret.classList.add("done"); return; }
+  if(reduceMotion){ box.textContent=CONFIG.letterText; if(caret) caret.classList.add("done"); typingActive=false; typingDone=true; return; }
   const txt=CONFIG.letterText; let i=0, last=performance.now();
   const step=(now)=>{
     if(now-last>24){ box.textContent=txt.slice(0,i+=2); last=now; }
     if(i<txt.length){ typeTimer=requestAnimationFrame(step); }
-    else { box.textContent=txt; if(caret) caret.classList.add("done"); }
+    else { box.textContent=txt; if(caret) caret.classList.add("done"); typingActive=false; typingDone=true; }
   };
   typeTimer=requestAnimationFrame(step);
 }
@@ -400,8 +405,8 @@ function goDeck(i) {
     d.classList.toggle("active", k === deckIdx);
     d.setAttribute("aria-selected", k === deckIdx ? "true" : "false");
   });
-  // Typing the letter feels magical when its card slides in
-  if (deckIdx === 1 && opened) startTyping();
+  // Typing the letter feels magical the FIRST time its card slides in — never again
+  if (deckIdx === 1 && opened && !typingDone && !typingActive) startTyping();
 }
 function initDeck() {
   const deck = $("#deck"), track = $("#deck-track"), dots = $("#deck-dots");
@@ -416,16 +421,28 @@ function initDeck() {
   goDeck(0);
   $("#deck-prev").addEventListener("click", () => goDeck(deckIdx - 1));
   $("#deck-next").addEventListener("click", () => goDeck(deckIdx + 1));
-  // Touch / mouse drag to swipe — velocity-aware, buttery snap
-  let startX = 0, curX = 0, startT = 0, dragging = false;
+  // Touch / mouse drag to swipe — velocity-aware, buttery snap.
+  // Vertical reading scrolls are NEVER treated as swipes (fixes letter restart on phones).
+  // Taps on buttons/links/text selection are NEVER treated as swipes either.
+  let startX = 0, startY = 0, curX = 0, curY = 0, startT = 0, dragging = false, lockDir = null, swipeEl = null;
   const threshold = 48;
-  function onStart(x) {
-    dragging = true; startX = x; curX = x; startT = performance.now();
+  function onStart(x, y, el) {
+    // Ignore gestures that begin on interactive elements — taps, not swipes
+    if (el && el.closest && el.closest("button, a, input, textarea, select")) { dragging = false; lockDir = null; swipeEl = null; return; }
+    dragging = true; startX = x; startY = y; curX = x; curY = y;
+    startT = performance.now(); lockDir = null; swipeEl = el || null;
     track.classList.add("dragging");
   }
-  function onMove(x) {
-    if (!dragging) return; curX = x;
-    const dx = curX - startX;
+  function onMove(x, y) {
+    if (!dragging) return; curX = x; curY = y;
+    const dx = curX - startX, dy = curY - startY;
+    // Decide gesture direction once movement is clear (~12px)
+    if (!lockDir && Math.hypot(dx, dy) > 12) lockDir = Math.abs(dx) > Math.abs(dy) * 1.2 ? "h" : "v";
+    if (lockDir === "v") {
+      // Let the card scroll vertically — snap the track back, no typing restart
+      track.style.transform = "translateX(-" + (deckIdx * 100) + "%)";
+      return;
+    }
     // Soft resistance at the ends so it never feels stuck
     let eased = dx;
     if ((deckIdx === 0 && dx > 0) || (deckIdx === deckCount() - 1 && dx < 0)) eased = dx * .35;
@@ -434,6 +451,8 @@ function initDeck() {
   }
   function onEnd() {
     if (!dragging) return; dragging = false; track.classList.remove("dragging");
+    // Pure vertical scroll → just re-settle on the same card (goDeck re-sets transform but typing is guarded)
+    if (lockDir === "v") { goDeck(deckIdx); return; }
     const dx = curX - startX;
     const dt = Math.max(1, performance.now() - startT);
     const velocity = dx / dt; // px per ms — fast flicks switch cards
@@ -441,11 +460,16 @@ function initDeck() {
     else if (dx > threshold || velocity > 0.45) goDeck(deckIdx - 1);
     else goDeck(deckIdx);
   }
-  deck.addEventListener("touchstart", (e) => onStart(e.touches[0].clientX), { passive: true });
-  deck.addEventListener("touchmove", (e) => onMove(e.touches[0].clientX), { passive: true });
+  deck.addEventListener("touchstart", (e) => onStart(e.touches[0].clientX, e.touches[0].clientY, e.target), { passive: true });
+  deck.addEventListener("touchmove", (e) => {
+    // Genuine vertical reading scroll inside a card → release the swipe entirely
+    if (!dragging) return;
+    if (lockDir === "v") { dragging = false; track.classList.remove("dragging"); return; }
+    onMove(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: true });
   deck.addEventListener("touchend", onEnd);
-  deck.addEventListener("mousedown", (e) => onStart(e.clientX));
-  window.addEventListener("mousemove", (e) => onMove(e.clientX));
+  deck.addEventListener("mousedown", (e) => onStart(e.clientX, e.clientY, e.target));
+  window.addEventListener("mousemove", (e) => onMove(e.clientX, e.clientY || 0));
   window.addEventListener("mouseup", onEnd);
   // Arrow keys swipe when card is open
   document.addEventListener("keydown", (e) => {
@@ -463,7 +487,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   $("#btn-close-card").addEventListener("click",hideCard);
   // Click dimmed backdrop to close, ESC too
   $("#card-overlay").addEventListener("click",(e)=>{ if(e.target.id==="card-overlay") hideCard(); });
-  $("#btn-replay").addEventListener("click",()=>{ if(!opened) openEnvelope(); else { goDeck(1); startTyping(); } });
+  $("#btn-replay").addEventListener("click",()=>{ if(!opened) openEnvelope(); else { goDeck(1); startTyping(true); } });
   $("#btn-lovenote").addEventListener("click",popLoveNote);
   $("#btn-secret").addEventListener("click",()=>{ goDeck(5); setTimeout(revealSecret, 450); });
   $("#btn-reveal").addEventListener("click",revealSecret);

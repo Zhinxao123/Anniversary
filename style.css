@@ -60,9 +60,10 @@ body{
 .tiny-note{color:#b97f92;font-size:.85rem;margin-top:1rem}
 .deck-card .counter-card{max-width:100%;margin:0 auto}
 .deck-card .counter-note{font-family:var(--font-body);font-weight:600;font-size:1rem}
-/* Readable love letter — Caveat, big, dark, comfy line height */
+/* Readable love letter — Caveat, big, dark, comfy line height.
+   Extra bottom room so phone readers never hit the edge while following text. */
 .letter-card h3{margin-bottom:0}
-.letter-paper.readable{opacity:0;transform:rotate(-.6deg) translateY(10px);transition:opacity .6s ease,transform .6s ease;text-align:left}
+.letter-paper.readable{opacity:0;transform:rotate(-.6deg) translateY(10px);transition:opacity .6s ease,transform .6s ease;text-align:left;padding-bottom:2.6rem}
 .letter-paper.readable.revealed{opacity:1;transform:rotate(0)}
 #typed-letter{font-family:var(--font-letter);font-size:1.65rem;font-weight:600;line-height:1.55;color:#3d1524;min-height:200px;white-space:pre-wrap;letter-spacing:.01em}
 .signature{font-family:var(--font-letter);font-weight:700;font-size:1.7rem;color:#a4134a;text-align:right;line-height:1.3}
