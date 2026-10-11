@@ -50,11 +50,23 @@ function applyConfig(){
     d.querySelector("h3").textContent=m.title; d.querySelector("p").textContent=m.text; g.appendChild(d);
   });
 }
-/* Envelope open / close */
+/* Envelope open -> pop the scrollable love card */
 let opened=false;
+function showCard() {
+  const overlay = $("#card-overlay");
+  overlay.classList.add("show");
+  overlay.setAttribute("aria-hidden", "false");
+  $("#love-card").setAttribute("aria-hidden", "false");
+}
+function hideCard() {
+  const overlay = $("#card-overlay");
+  overlay.classList.remove("show");
+  overlay.setAttribute("aria-hidden", "true");
+}
 function openEnvelope(){
   const env=$("#envelope");
-  if(opened) return; opened=true;
+  if(opened) { showCard(); return; }
+  opened=true;
   env.classList.add("open");
   $("#seal-btn").setAttribute("aria-expanded","true");
   $("#envelope-status").textContent="Opened with love 💖";
@@ -70,7 +82,8 @@ function openEnvelope(){
   // 🎵 Auto-play music (user clicked/tapped, so browsers allow it)
   autoStartMusic();
   showToast("💌 The seal is broken!", "Hearts burst + our song begins…");
-  setTimeout(()=>$("#love-letter").scrollIntoView({behavior:reduceMotion?"auto":"smooth",block:"center"}),900);
+  // Pop the scrollable card after the flap animation
+  setTimeout(showCard, 900);
 }
 function resetEnvelope(){
   opened=false;
@@ -319,10 +332,13 @@ document.addEventListener("DOMContentLoaded",()=>{
   applyConfig(); tickCounter(); setInterval(tickCounter,1000);
   spawnHearts(); startPetals();
   $("#seal-btn").addEventListener("click",openEnvelope);
-  $("#btn-open").addEventListener("click",()=>{ opened?$("#love-letter").scrollIntoView({behavior:"smooth"}):openEnvelope(); });
+  $("#btn-open").addEventListener("click",openEnvelope);
+  $("#btn-close-card").addEventListener("click",hideCard);
+  // Click dimmed backdrop to close, ESC too
+  $("#card-overlay").addEventListener("click",(e)=>{ if(e.target.id==="card-overlay") hideCard(); });
   $("#btn-replay").addEventListener("click",()=>{ if(!opened) openEnvelope(); else startTyping(); });
   $("#btn-lovenote").addEventListener("click",popLoveNote);
-  $("#btn-secret").addEventListener("click",()=>{ $("#secret-blur").scrollIntoView({behavior:"smooth",block:"center"}); revealSecret(); });
+  $("#btn-secret").addEventListener("click",()=>{ revealSecret(); const sc=$(".love-card-scroll"); const t=$("#secret-blur"); if(sc&&t) sc.scrollTo({top:t.offsetTop-120,behavior:reduceMotion?"auto":"smooth"}); });
   $("#btn-reveal").addEventListener("click",revealSecret);
   $("#btn-kiss").addEventListener("click",sendKiss);
   $("#btn-confetti").addEventListener("click",(e)=>{ const r=e.target.getBoundingClientRect(); sparkleBurst(r.left+r.width/2,r.top); showToast("✨ Sparkles!","The universe is blushing."); });
@@ -332,7 +348,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     try{ await navigator.clipboard.writeText(CONFIG.letterText); e.target.textContent="✅ Copied!"; setTimeout(()=>e.target.textContent="📋 Copy Letter",2000); }
     catch(err){ showToast("📋 Copy failed","Select the letter text manually."); }
   });
-  document.addEventListener("keydown",(e)=>{ if(e.key.toLowerCase()==="k") sendKiss(); if(e.key.toLowerCase()==="l") popLoveNote(); });
+  document.addEventListener("keydown",(e)=>{ const k=e.key.toLowerCase(); if(k==="k") sendKiss(); if(k==="l") popLoveNote(); if(e.key==="Escape") hideCard(); if(e.key==="Enter" && !opened && document.activeElement===$("#seal-btn")) openEnvelope(); });
   setTimeout(()=>showToast("💘 Psst… tap the heart seal","Something handwritten is waiting."),2500);
 });
 

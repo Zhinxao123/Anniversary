@@ -12,14 +12,44 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
+html,body{height:100%}
 body{
   margin:0; font-family:var(--font-body); color:var(--cream);
   background:
     radial-gradient(1200px 600px at 50% -10%, #ff4d7e33, transparent 60%),
     radial-gradient(900px 500px at 90% 20%, #ffd16622, transparent 60%),
     linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 45%, #3d0d24 100%);
-  min-height:100vh; overflow-x:hidden;
+  min-height:100vh; min-height:100dvh; overflow:hidden; /* 🔒 landing never scrolls */
+  height:100vh; height:100dvh;
 }
+/* ---------- Landing: single envelope, always centered ---------- */
+#landing{height:100vh;height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;padding:1rem;position:relative;z-index:2;text-align:center;overflow:hidden}
+.landing-hero h1{font-family:var(--font-script);font-size:clamp(2.6rem,8vw,4.6rem);margin:.2rem 0;line-height:1;text-shadow:0 4px 24px rgba(255,77,126,.5)}
+.landing-hero .amp{font-size:.7em;vertical-align:middle}
+.landing-hero .subtitle{font-size:clamp(1rem,2.6vw,1.25rem);color:#ffe3ec;margin:.2rem 0 .4rem}
+.big-open{font-size:1.15rem !important;padding:1rem 2.2rem !important;border-radius:999px !important;margin-top:1rem;animation:openGlow 2s ease-in-out infinite}
+@keyframes openGlow{0%,100%{box-shadow:0 0 0 0 rgba(255,77,126,.55)}50%{box-shadow:0 0 0 14px rgba(255,77,126,0)}}
+/* ---------- Love card popup (the ONLY scrollable area) ---------- */
+.card-overlay{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:1rem; background:rgba(20,4,14,.55);backdrop-filter:blur(6px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .45s ease,visibility .45s}
+.card-overlay.show{opacity:1;visibility:visible;pointer-events:auto}
+.love-card{position:relative;width:min(680px,94vw);height:min(86vh,86dvh);background:linear-gradient(180deg,#fff7f9,#ffe9ef);color:var(--ink);border-radius:26px;box-shadow:0 30px 80px rgba(0,0,0,.55);border:3px solid #ff8fab;transform:translateY(60px) scale(.92);opacity:0;transition:transform .5s cubic-bezier(.2,1.3,.35,1),opacity .4s ease;overflow:hidden;display:flex;flex-direction:column}
+.card-overlay.show .love-card{transform:translateY(0) scale(1);opacity:1}
+.card-close{position:absolute;top:.6rem;right:.6rem;z-index:5;width:42px;height:42px;border-radius:50%;border:none;background:#a4134a;color:#fff;font-size:1.1rem;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.3)}
+.card-close:hover{background:#7d0e38}
+.love-card-scroll{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:1.6rem 1.3rem 2rem;flex:1}
+.love-card-scroll::-webkit-scrollbar{width:10px}
+.love-card-scroll::-webkit-scrollbar-thumb{background:#ff8fab;border-radius:99px}
+.love-card-scroll section{margin:1.6rem 0}
+.love-card-scroll section h2{font-family:var(--font-script);font-size:clamp(1.9rem,5vw,2.6rem);text-align:center;margin:0 0 .4rem;color:#a4134a;text-shadow:none}
+.love-card-scroll .section-sub{color:#9a6a7a}
+.love-card .letter-paper{opacity:1;transform:none;box-shadow:0 12px 30px rgba(164,19,74,.18)}
+.love-card .secret-card{background:#fff;border:1px solid #f3c6d3}
+.love-card .counter-card{background:#a4134a;color:#fff;border:none;backdrop-filter:none;box-shadow:0 12px 30px rgba(164,19,74,.35)}
+.love-card .counter-label{color:#ffe3ec}
+.love-card .counter-note{color:var(--gold)}
+.love-card .controls{justify-content:center}
+.love-card .card-footer{text-align:center;color:#9a6a7a;padding:1rem .5rem .5rem;font-size:.95rem}
+.love-card .card-footer .tiny{font-size:.8rem;opacity:.8}
 .skip-link{position:absolute;left:-999px;top:0;background:#fff;color:#000;padding:.7rem 1rem;z-index:999;border-radius:0 0 12px 0}
 .skip-link:focus{left:0}
 #petals-canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
@@ -29,18 +59,16 @@ body{
 @keyframes floatUp{to{transform:translateY(-110vh) rotate(20deg);opacity:0}}
 @keyframes twinkle{0%,100%{opacity:.15;transform:scale(.7) rotate(0deg)}50%{opacity:1;transform:scale(1.2) rotate(20deg)}}
 .hero{text-align:center;padding:3.5rem 1.2rem 1rem;position:relative;z-index:2}
-.eyebrow{letter-spacing:.18em;text-transform:uppercase;font-size:.8rem;color:var(--rose);margin:0 0 .6rem}
-.hero h1{font-family:var(--font-script);font-size:clamp(3rem,8vw,5.5rem);margin:.2rem 0;line-height:1;text-shadow:0 4px 24px rgba(255,77,126,.5)}
-.hero h1 .amp{font-size:.7em;vertical-align:middle}
-.subtitle{font-size:clamp(1rem,2.6vw,1.3rem);color:#ffe3ec;margin:.2rem 0 1.5rem}
-.counter-card{background:var(--card);border:1px solid var(--card-border);backdrop-filter:blur(14px);border-radius:var(--radius);padding:1.2rem 1.5rem;max-width:560px;margin:0 auto;box-shadow:var(--shadow)}
+.eyebrow{letter-spacing:.18em;text-transform:uppercase;font-size:.75rem;color:var(--rose);margin:0 0 .4rem}
+.counter-card{background:var(--card);border:1px solid var(--card-border);backdrop-filter:blur(14px);border-radius:var(--radius);padding:1.2rem 1.5rem;max-width:560px;margin:0 auto;box-shadow:var(--shadow);color:#fff}
 .counter-label{margin:.2rem 0 1rem;color:#ffe3ec}
 .counter-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem}
 .counter-grid div{background:rgba(255,255,255,.12);border-radius:16px;padding:.7rem .3rem;border:1px solid rgba(255,255,255,.15)}
 .counter-grid span{font-size:clamp(1.5rem,5vw,2.2rem);font-weight:700;display:block;color:#fff}
 .counter-grid small{text-transform:uppercase;letter-spacing:.12em;font-size:.7rem;color:var(--rose)}
 .counter-note{font-family:var(--font-script);font-size:1.5rem;color:var(--gold);margin:.8rem 0 0}
-main{position:relative;z-index:2;max-width:980px;margin:0 auto;padding:1rem 1.2rem 3rem}
+.love-card .counter-grid div{background:rgba(255,255,255,.18)}
+.love-card .counter-grid small{color:#ffe3ec}
 section{margin:2.5rem 0}
 section h2{font-family:var(--font-script);font-size:clamp(2rem,5vw,3rem);text-align:center;margin:0 0 .4rem;text-shadow:0 2px 16px rgba(0,0,0,.4)}
 .section-sub,.hint{text-align:center;color:#ffd7e3;max-width:620px;margin:0 auto 1.4rem}
@@ -74,7 +102,7 @@ code{background:rgba(0,0,0,.35);padding:.15rem .45rem;border-radius:8px;font-siz
 .btn[aria-pressed="true"]{background:linear-gradient(180deg,#ffd166,#e8a93d);color:#4a2333;border-color:#fff}
 
 
-.letter-paper{background:var(--paper);color:var(--ink);border-radius:18px;padding:2.2rem 1.6rem;max-width:720px;margin:0 auto;position:relative;box-shadow:var(--shadow)}
+.letter-paper{background:var(--paper);color:var(--ink);border-radius:18px;padding:2.2rem 1.6rem;max-width:720px;margin:0 auto;position:relative;box-shadow:var(--shadow);opacity:0;transform:rotate(-.6deg) translateY(10px);transition:opacity .6s ease,transform .6s ease}
 .letter-paper.revealed{opacity:1;transform:rotate(0)}
 #typed-letter{font-family:var(--font-script);font-size:1.8rem;line-height:1.5;min-height:220px;white-space:pre-wrap}
 .caret{animation:blink 1s infinite;color:var(--pink)}
@@ -82,19 +110,28 @@ code{background:rgba(0,0,0,.35);padding:.15rem .45rem;border-radius:8px;font-siz
 .signature{font-family:var(--font-script);font-size:2rem;color:#a4134a;text-align:right}
 .memory-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem}
 .memory-card{background:var(--card);border:1px solid var(--card-border);border-radius:18px;padding:1.2rem;text-align:center}
+.love-card .letter-paper{opacity:1;transform:none;box-shadow:0 12px 30px rgba(164,19,74,.18)}
+.love-card .memory-card{background:#fff;border:1px solid #f3c6d3;color:var(--ink)}
+.love-card .secret-card{background:#fff;border:1px solid #f3c6d3}
+.love-card #secret-blur{background:#fbe4ea;color:#6d1030}
+.love-card code{background:#fbe4ea;color:#a4134a}
+.love-card .controls .btn{background:#a4134a;border-color:#a4134a;color:#fff}
+.love-card .controls .btn:hover{background:#7d0e38}
+.love-card .controls .btn.primary{background:linear-gradient(180deg,#ff5c8a,#d11a55);border-color:#ff8fab}
+.love-card .controls .btn[aria-pressed="true"]{background:linear-gradient(180deg,#ffd166,#e8a93d);color:#4a2333;border-color:#a4134a}
 #secret-blur{filter:blur(8px);background:rgba(0,0,0,.25);padding:1rem;border-radius:14px}
 #secret-blur.unblurred{filter:blur(0)}
-#toast-stack{position:fixed;right:12px;bottom:12px;display:flex;flex-direction:column;gap:.6rem;z-index:50}
-.toast{background:#fff;color:#6d1030;border-radius:16px;padding:.8rem 1rem;border:2px solid #ff8fab}
-#kiss-overlay{position:fixed;inset:0;display:grid;place-items:center;pointer-events:none;opacity:0;z-index:60}
+#toast-stack{position:fixed;right:12px;bottom:12px;display:flex;flex-direction:column;gap:.6rem;z-index:100}
+.toast{background:#fff;color:#6d1030;border-radius:16px;padding:.8rem 1rem;border:2px solid #ff8fab;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+#kiss-overlay{position:fixed;inset:0;display:grid;place-items:center;pointer-events:none;opacity:0;z-index:90}
 #kiss-overlay.show{opacity:1}
 #kiss-mark{font-size:7rem;animation:kissPop 1.4s ease forwards}
 @keyframes kissPop{0%{transform:scale(0);opacity:0}25%{transform:scale(1.3);opacity:1}100%{transform:scale(1) translateY(-18px);opacity:0}}
 footer{text-align:center;padding:2rem;color:#ffcad4}
-.burst{position:fixed;width:10px;height:10px;border-radius:50%;z-index:70;animation:burstFly 1s ease-out forwards;pointer-events:none}
+.burst{position:fixed;width:10px;height:10px;border-radius:50%;z-index:95;animation:burstFly 1s ease-out forwards;pointer-events:none}
 @keyframes burstFly{to{transform:translate(var(--dx),var(--dy)) scale(0);opacity:0}}
 /* 💖 Exploding hearts from envelope */
-.heart-particle{position:fixed;z-index:71;pointer-events:none;transform:translate(-50%,-50%);filter:drop-shadow(0 6px 12px rgba(0,0,0,.4));animation:heartFly ease-out forwards}
+.heart-particle{position:fixed;z-index:96;pointer-events:none;transform:translate(-50%,-50%);filter:drop-shadow(0 6px 12px rgba(0,0,0,.4));animation:heartFly ease-out forwards}
 @keyframes heartFly{
   0%{transform:translate(-50%,-50%) scale(0) rotate(0deg);opacity:0}
   12%{transform:translate(calc(-50% + var(--hdx)*.15),calc(-50% + var(--hdy)*.15)) scale(1.35) rotate(calc(var(--hrot)*.3));opacity:1}
@@ -113,6 +150,8 @@ footer{text-align:center;padding:2rem;color:#ffcad4}
 footer .tiny{font-size:.8rem;opacity:.8}
 @media (max-width:600px){.envelope{height:210px}.wax-seal{width:72px;height:72px;top:46%}.letter-paper{padding:1.8rem 1rem}}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important}#hearts-bg,#sparkles-bg,#petals-canvas{display:none}}
-@media print{body{background:#fff;color:#000}.hero,.envelope-section,.memories,.secret-section,.customize,footer,#toast-stack{display:none !important}.letter-paper{opacity:1}}
+@media print{body{background:#fff;color:#000;overflow:visible;height:auto}#landing,#toast-stack,#kiss-overlay,#hearts-bg,#sparkles-bg,#petals-canvas{display:none !important}.card-overlay{position:static;opacity:1;visibility:visible;background:none;padding:0}.love-card{width:100%;height:auto;transform:none;opacity:1;border:none;box-shadow:none}.card-close{display:none}.love-card-scroll{overflow:visible}}
+/* Small screens: shrink landing so envelope always fits */
+@media (max-height:700px){#landing{gap:.1rem}.landing-hero h1{font-size:clamp(2rem,7vh,3rem)}.envelope-scene{padding:1rem 0 .4rem;min-height:260px}.envelope{height:200px}.big-open{margin-top:.5rem;padding:.7rem 1.8rem !important}}
 
 @media (max-width:600px){.counter-grid{grid-template-columns:repeat(2,1fr)}.controls .btn{flex:1 1 44%}}
