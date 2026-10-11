@@ -19,8 +19,8 @@ Open `script.js` → edit the `CONFIG` object at the top:
 const CONFIG = {
   nameA: "Aarav",
   nameB: "Diya",
-  anniversaryDate: "2021-06-14T00:00:00",
-  anniversaryLabel: "June 14, 2021",
+  anniversaryDate: "2026-10-16T00:00:00",
+  anniversaryLabel: "October 16, 2026",
   signature: "— Aarav ❤",
   letterText: `My dearest Diya, ...`,
   secretMessage: "Meet me under our stars tonight? ...",

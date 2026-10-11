@@ -2,10 +2,10 @@
 const CONFIG = {
   nameA: "Aarav",
   nameB: "Diya",
-  anniversaryDate: "2021-06-14T00:00:00",
-  anniversaryLabel: "June 14, 2021",
+  anniversaryDate: "2026-10-16T00:00:00",
+  anniversaryLabel: "October 16, 2026",
   signature: "— Aarav ❤",
-  letterDate: "June 14th • Forever Yours",
+  letterDate: "October 16th • Forever Yours",
   letterText: `My dearest Diya,
 
 Another year, another chapter of us — and my heart still skips exactly the way it did on day one.
@@ -41,8 +41,7 @@ function applyConfig(){
   $("#secret-blur").textContent = CONFIG.secretMessage;
   $("#foot-names").textContent = CONFIG.nameA + " & " + CONFIG.nameB;
   $("#foot-year").textContent = new Date().getFullYear();
-  const y = Math.floor((Date.now()-new Date(CONFIG.anniversaryDate))/31557600000);
-  $("#years-together").textContent = y>0 ? y+(y===1?" year":" years") : "day one";
+  // years-together text is set by tickCounter() (countdown vs count-up aware)
   const g=$("#memory-grid"); g.innerHTML="";
   CONFIG.memories.forEach(m=>{
     const d=document.createElement("div"); d.className="memory-card";
@@ -103,15 +102,33 @@ function startTyping(){
     if(i>=txt.length){ clearInterval(typeTimer); caret.classList.add("done"); showToast("💖 Letter complete","Replay it anytime with ↻ button."); }
   },38);
 }
-/* Anniversary live counter */
+/* Anniversary live counter — counts DOWN if date is in the future 💖 */
 function tickCounter(){
-  const start=new Date(CONFIG.anniversaryDate); let diff=Date.now()-start;
-  if(diff<0) diff=0;
+  const target=new Date(CONFIG.anniversaryDate);
+  const now=Date.now();
+  const isFuture = target.getTime() > now;
+  let diff = isFuture ? target.getTime()-now : now-target.getTime();
   const d=Math.floor(diff/86400000), h=Math.floor(diff/3600000)%24;
   const m=Math.floor(diff/60000)%60, s=Math.floor(diff/1000)%60;
   $("#c-days").textContent=d; $("#c-hours").textContent=h;
   $("#c-mins").textContent=m; $("#c-secs").textContent=s;
-  const notes=["and every second still feels like magic","still falling for you daily","my favorite forever countdown","home is wherever you are"];
+  // Label: "countdown to" vs "loving you for"
+  const labelEl = document.querySelector(".counter-label");
+  if (labelEl) {
+    labelEl.innerHTML = isFuture
+      ? "Counting down to <span id=\"years-together\"></span> • <span id=\"anniv-date-label\"></span>"
+      : "Loving you for <span id=\"years-together\"></span> • since <span id=\"anniv-date-label\"></span>";
+    $("#anniv-date-label").textContent = CONFIG.anniversaryLabel;
+    if (isFuture) {
+      $("#years-together").textContent = d>0 ? d+(d===1?" day":" days")+" to go" : "today's the day";
+    } else {
+      const y = Math.floor((now-target.getTime())/31557600000);
+      $("#years-together").textContent = y>0 ? y+(y===1?" year":" years") : "day one";
+    }
+  }
+  const notes = isFuture
+    ? ["until I get to celebrate you 💖","almost time, my love ✨","counting heartbeats till then 💘","get ready for forever 🥰"]
+    : ["and every second still feels like magic","still falling for you daily","my favorite forever countdown","home is wherever you are"];
   $("#counter-note").textContent=notes[d%notes.length];
 }
 /* Floating hearts + sparkles */
