@@ -8,6 +8,8 @@ anniversary-love-letter/
 ├── index.html   # structure + content
 ├── style.css    # romance styling, 3D envelope, responsive
 ├── script.js    # CONFIG, typing, counter, petals, kisses, music
+├── images/      # card photos (PNG)
+├── music/       # background song (song.m4a)
 └── README.md    # this file (deployment guide)
 ```
 All paths are **relative** (`./style.css`, `./script.js`) so it works at `username.github.io/repo-name/` with zero changes.
@@ -55,14 +57,14 @@ To update: edit `script.js` CONFIG, commit + push — Pages redeploys automatica
 ## Features checklist (all working, test before sending!)
 - [ ] Click / tap / Enter on **heart wax seal** → envelope 3D flap opens
 - [ ] **Hearts burst** from envelope + sparkles, music auto-plays
-- [ ] Swipeable **7-card deck**: countdown → love letter → memories → reasons → promises → secret → finale
+- [ ] Swipeable **10-card deck**: countdown → love letter → foodtrip → movies → fighting → travel → reasons → promises → secret → finale
 - [ ] Swipe via touch, mouse-drag, arrows, dots, or ← → keys
 - [ ] Love letter in readable **Caveat** font with typing animation + Replay
 - [ ] **Anniversary countdown** to Oct 16, 2026 (auto flips to count-up after)
 - [ ] Floating hearts, twinkling sparkles, falling rose petals (canvas)
 - [ ] **Pop Love Note** playful toasts, **Secret Message** blur reveal
 - [ ] **Send a Kiss** 💋 fullscreen animation (also press `K`)
-- [ ] **Music toggle** — optional WebAudio lullaby + `music.mp3` support
+- [ ] **Music toggle** — background song `music/song.m4a` auto-plays on envelope open (WebAudio lullaby as fallback)
 - [ ] Print / Save PDF + Copy Letter buttons
 - [ ] Responsive: phones, small heights, landscape + `prefers-reduced-motion` support
 

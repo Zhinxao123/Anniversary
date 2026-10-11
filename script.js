@@ -114,13 +114,17 @@ function startTyping(force){
   // Don't restart mid-typing (e.g. scroll snap-back re-calling goDeck)
   if(typingActive && !force) return;
   typingActive=true; typingDone=false;
-  cancelAnimationFrame(typeTimer); box.textContent=""; if(caret) caret.classList.remove("done");
-  if(reduceMotion){ box.textContent=CONFIG.letterText; if(caret) caret.classList.add("done"); typingActive=false; typingDone=true; return; }
+  cancelAnimationFrame(typeTimer);
+  // textContent wipes children — always re-append the caret so it sits at the end of the text
+  const setTxt=(t)=>{ box.textContent=t; if(caret) box.appendChild(caret); };
+  setTxt("");
+  if(caret) caret.classList.remove("done");
+  if(reduceMotion){ setTxt(CONFIG.letterText); if(caret) caret.classList.add("done"); typingActive=false; typingDone=true; return; }
   const txt=CONFIG.letterText; let i=0, last=performance.now();
   const step=(now)=>{
-    if(now-last>24){ box.textContent=txt.slice(0,i+=2); last=now; }
+    if(now-last>24){ setTxt(txt.slice(0,i+=2)); last=now; }
     if(i<txt.length){ typeTimer=requestAnimationFrame(step); }
-    else { box.textContent=txt; if(caret) caret.classList.add("done"); typingActive=false; typingDone=true; }
+    else { setTxt(txt); if(caret) caret.classList.add("done"); typingActive=false; typingDone=true; }
   };
   typeTimer=requestAnimationFrame(step);
 }

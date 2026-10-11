@@ -1,9 +1,9 @@
 Save your 4 chibi drawings here:
 
-1. foodtrip.jpg  <- your FOODTRIP burger drawing
-2. movies.jpg    <- your WATCHING MOVIES popcorn drawing
-3. fighting.jpg  <- your FIGHTING drawing
-4. travel.jpg    <- your TRAVEL mountain drawing
+1. foodtrip.png  <- your FOODTRIP burger drawing
+2. movies.png    <- your WATCHING MOVIES popcorn drawing
+3. fighting.png  <- your FIGHTING drawing
+4. travel.png    <- your TRAVEL mountain drawing
 
 Tip: Right-click each picture you sent me -> Save image as -> put it in this folder with the exact name above.
 JPG, JPEG, PNG, or WEBP all work — just keep the names matching index.html.

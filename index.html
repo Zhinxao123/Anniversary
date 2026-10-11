@@ -44,9 +44,8 @@
 </div>
 <p class="envelope-status" id="envelope-status" role="status">Sealed with love 💌</p>
 <audio id="romantic-music" loop preload="auto">
-  <!-- 💖 OPTIONAL: add your own song. Put music.mp3 next to index.html, then uncomment:
-  <source src="./music.mp3" type="audio/mpeg" />
-  -->
+  <!-- 💖 Background song — auto-starts (with sound) when the envelope opens -->
+  <source src="./music/song.m4a" type="audio/mp4" />
 </audio>
 <button id="btn-open" class="btn primary big-open">💌 Tap to Open</button>
 </section>
@@ -88,7 +87,7 @@
       <p class="letter-meta" id="letter-date">October 16th • Forever Yours</p>
       <article class="letter-paper readable" id="love-letter" aria-hidden="true" aria-labelledby="letter-heading">
         <div class="tape" aria-hidden="true"></div>
-        <div id="typed-letter" aria-live="polite"></div><span class="caret" id="typing-caret" aria-hidden="true">▌</span>
+        <div id="typed-letter" aria-live="polite"><span class="caret" id="typing-caret" aria-hidden="true">▌</span></div>
         <div class="signature">Forever & always,<br /><span id="signature-name">— Justin ❤</span></div>
       </article>
       <div class="letter-actions">
@@ -103,7 +102,7 @@
       <p class="card-emoji">🍔</p>
       <h3>Our Little Foodtrips</h3>
       <figure class="photo-frame">
-        <img src="./images/foodtrip.png" alt="Cute drawing of Justin and Marjorie eating burgers together" loading="lazy" onerror="this.classList.add('img-missing');this.outerHTML='<div class=\'photo-fallback\'>🍔💖<small>Save your foodtrip drawing as<br>images/foodtrip.jpg</small></div>'" />
+        <img src="./images/foodtrip.png" alt="Cute drawing of Justin and Marjorie eating burgers together" loading="lazy" onerror="this.classList.add('img-missing');this.outerHTML='<div class=\'photo-fallback\'>🍔💖<small>Save your foodtrip drawing as<br>images/foodtrip.png</small></div>'" />
         <figcaption class="photo-bubble">FOODTRIP ♥</figcaption>
       </figure>
       <p class="photo-message">From burgers to fries to late-night cravings — everything tastes better when I'm with you. You + me + good food = my favorite date. 🍟</p>
@@ -114,7 +113,7 @@
       <p class="card-emoji">🎬</p>
       <h3>Watching Movies Together</h3>
       <figure class="photo-frame">
-        <img src="./images/movies.png" alt="Cute drawing of Justin and Marjorie watching movies with popcorn" loading="lazy" onerror="this.classList.add('img-missing');this.outerHTML='<div class=\'photo-fallback\'>🎬💖<small>Save your movie drawing as<br>images/movies.jpg</small></div>'" />
+        <img src="./images/movies.png" alt="Cute drawing of Justin and Marjorie watching movies with popcorn" loading="lazy" onerror="this.classList.add('img-missing');this.outerHTML='<div class=\'photo-fallback\'>🎬💖<small>Save your movie drawing as<br>images/movies.png</small></div>'" />
         <figcaption class="photo-bubble">WATCHING MOVIES 🎬</figcaption>
       </figure>
       <p class="photo-message">You stealing my popcorn, cuddled up close under a blanket — my favorite cinema will always be right beside you. 🍿</p>
@@ -125,7 +124,7 @@
       <p class="card-emoji">💥</p>
       <h3>Even When We Fight</h3>
       <figure class="photo-frame">
-        <img src="./images/fighting.png" alt="Cute drawing of Marjorie playfully scolding Justin" loading="lazy" onerror="this.classList.add('img-missing');this.outerHTML='<div class=\'photo-fallback\'>💥💖<small>Save your fighting drawing as<br>images/fighting.jpg</small></div>'" />
+        <img src="./images/fighting.png" alt="Cute drawing of Marjorie playfully scolding Justin" loading="lazy" onerror="this.classList.add('img-missing');this.outerHTML='<div class=\'photo-fallback\'>💥💖<small>Save your fighting drawing as<br>images/fighting.png</small></div>'" />
         <figcaption class="photo-bubble">FIGHTING 💢</figcaption>
       </figure>
       <p class="photo-message">Even in our tampuhan and silly fights, I never want to lose you. We argue, we pout, but we always choose to hug it out. You're still my favorite person. 🥺💖</p>
@@ -136,7 +135,7 @@
       <p class="card-emoji">✈️</p>
       <h3>Traveling With You</h3>
       <figure class="photo-frame">
-        <img src="./images/travel.png" alt="Cute drawing of Justin and Marjorie traveling in the mountains" loading="lazy" onerror="this.classList.add('img-missing');this.outerHTML='<div class=\'photo-fallback\'>✈️💖<small>Save your travel drawing as<br>images/travel.jpg</small></div>'" />
+        <img src="./images/travel.png" alt="Cute drawing of Justin and Marjorie traveling in the mountains" loading="lazy" onerror="this.classList.add('img-missing');this.outerHTML='<div class=\'photo-fallback\'>✈️💖<small>Save your travel drawing as<br>images/travel.png</small></div>'" />
         <figcaption class="photo-bubble">TRAVEL ✈️</figcaption>
       </figure>
       <p class="photo-message">Mountains, beaches, or just jeep rides around town — anywhere feels like paradise as long as I'm holding your hand. Let's see the world together. 🏔️</p>

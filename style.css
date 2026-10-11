@@ -24,8 +24,8 @@ body{
   height:100vh; height:100dvh;
 }
 /* ---------- Landing: single envelope, always centered ---------- */
-#landing{height:100vh;height:100dvh;max-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.25rem;padding:.75rem 1rem;position:relative;z-index:2;text-align:center;overflow:hidden;box-sizing:border-box}
-.landing-hero h1{font-family:var(--font-script);font-weight:400;font-size:clamp(2.2rem,7vh+1rem,4.2rem);margin:.1rem 0;line-height:1.05;text-wrap:balance;text-shadow:0 4px 24px rgba(255,77,126,.5)}
+#landing{height:100vh;height:100dvh;max-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.25rem;padding:.75rem 1rem;position:relative;z-index:2;text-align:center;overflow-y:auto;overflow-x:hidden;box-sizing:border-box}
+.landing-hero h1{font-family:var(--font-script);font-weight:400;font-size:clamp(2.2rem,calc(1rem + 6vw + 2vh),4.2rem);margin:.1rem 0;line-height:1.08;text-wrap:balance;overflow-wrap:break-word;text-shadow:0 4px 24px rgba(255,77,126,.5)}
 .landing-hero .amp{font-size:.7em;vertical-align:middle}
 .landing-hero .eyebrow{font-size:clamp(.65rem,2vw,.78rem)}
 .landing-hero .subtitle{font-size:clamp(.95rem,2.4vw,1.2rem);color:#ffe3ec;margin:.15rem 0 .3rem}
@@ -44,56 +44,58 @@ body{
 .card-close:hover{background:#7d0e38;transform:scale(1.1)}
 .card-close:active{transform:scale(.92)}
 /* ---------- Swipeable deck (NO vertical scroll — swipe left/right) ---------- */
-.deck-top{text-align:center;padding:1.2rem 1rem .2rem}
-.deck-title{font-family:var(--font-script);font-size:clamp(2rem,6vw,2.8rem);color:#a4134a;margin:0}
-.deck-swipe-hint{color:#b97f92;font-size:.85rem;margin:.1rem 0 .4rem;letter-spacing:.08em;animation:nudgeX 2.2s ease-in-out infinite}
+.deck-top{text-align:center;padding:1.2rem 3.2rem .2rem}
+.deck-title{font-family:var(--font-script);font-size:clamp(1.9rem,6vw,2.8rem);color:#a4134a;margin:0;line-height:1.15;overflow-wrap:break-word;text-wrap:balance}
+.deck-swipe-hint{color:#8a4a5e;font-size:.85rem;margin:.1rem 0 .4rem;letter-spacing:.08em;line-height:1.5;animation:nudgeX 2.2s ease-in-out infinite}
 @keyframes nudgeX{0%,100%{transform:translateX(-6px);opacity:.7}50%{transform:translateX(6px);opacity:1}}
 .deck{flex:1;overflow:hidden;position:relative;touch-action:pan-y;min-height:0}
 .deck-track{display:flex;height:100%;transition:transform .5s cubic-bezier(.22,1,.36,1);will-change:transform}
 .deck-track.dragging{transition:none}
-.deck-card{flex:0 0 100%;width:100%;max-width:100%;height:100%;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:1rem 1.3rem 1.4rem;text-align:center;scrollbar-width:thin;box-sizing:border-box}
+.deck-card{flex:0 0 100%;width:100%;max-width:100%;height:100%;min-height:0;margin:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:1rem 1.3rem 2rem;text-align:center;scrollbar-width:thin;box-sizing:border-box;overflow-wrap:break-word;word-break:break-word}
 .deck-card::-webkit-scrollbar{width:8px}
 .deck-card::-webkit-scrollbar-thumb{background:#ff8fab;border-radius:99px}
-.deck-card h3{font-family:var(--font-script);font-weight:400;font-size:clamp(2rem,6vw,2.7rem);color:#a4134a;margin:.3rem 0 .6rem}
+.deck-card h3{font-family:var(--font-script);font-weight:400;font-size:clamp(1.7rem,5.5vw,2.7rem);color:#a4134a;margin:.3rem 0 .6rem;line-height:1.15;overflow-wrap:break-word;word-break:break-word;text-wrap:balance}
 .card-emoji{font-size:2.6rem;margin:.2rem 0}
 .card-emoji.big{font-size:3.4rem}
-.tiny-note{color:#b97f92;font-size:.85rem;margin-top:1rem}
+.tiny-note{color:#8a4a5e;font-size:.85rem;margin-top:1rem;line-height:1.5}
 .deck-card .counter-card{max-width:100%;margin:0 auto}
 .deck-card .counter-note{font-family:var(--font-body);font-weight:600;font-size:1rem}
 /* Readable love letter — Caveat, big, dark, comfy line height.
    Extra bottom room so phone readers never hit the edge while following text. */
-.letter-card h3{margin-bottom:0}
-.letter-paper.readable{opacity:0;transform:rotate(-.6deg) translateY(10px);transition:opacity .6s ease,transform .6s ease;text-align:left;padding-bottom:2.6rem}
+.letter-card h3{margin-bottom:0;line-height:1.2;overflow-wrap:break-word}
+.letter-paper.readable{opacity:0;transform:rotate(-.6deg) translateY(10px);transition:opacity .6s ease,transform .6s ease;text-align:left;padding-bottom:2.6rem;margin-top:16px}
 .letter-paper.readable.revealed{opacity:1;transform:rotate(0)}
-#typed-letter{font-family:var(--font-letter);font-size:1.65rem;font-weight:600;line-height:1.55;color:#3d1524;min-height:200px;white-space:pre-wrap;letter-spacing:.01em}
+#typed-letter{display:block;font-family:var(--font-letter);font-size:1.65rem;font-weight:600;line-height:1.55;color:#3d1524;min-height:200px;white-space:pre-wrap;letter-spacing:.01em;overflow-wrap:break-word;word-break:break-word}
+.caret{display:inline-block;vertical-align:baseline}
 .signature{font-family:var(--font-letter);font-weight:700;font-size:1.7rem;color:#a4134a;text-align:right;line-height:1.3}
 .letter-actions{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin:.9rem 0 .4rem}
 .letter-actions .btn.small{background:#a4134a;border-color:#a4134a;color:#fff}
 .deck-card .memory-grid{grid-template-columns:repeat(2,1fr);gap:.7rem;margin:.6rem 0 1rem}
 .deck-card .memory-card{padding:.9rem .7rem}
-.deck-card .memory-card h3{font-family:var(--font-body);font-size:1rem;font-weight:700;color:#a4134a;margin:.3rem 0}
-.deck-card .memory-card p{font-size:.88rem;margin:0;color:#6d4a57}
-.deck-card .secret-card{padding:1.4rem 1.2rem}
-.deck-card .secret-card .btn,.deck-card #btn-lovenote,.deck-card #btn-kiss{margin-top:.9rem}
+.deck-card .memory-card h3{font-family:var(--font-body);font-size:1rem;font-weight:700;color:#a4134a;margin:.3rem 0;line-height:1.3;overflow-wrap:break-word;word-break:break-word}
+.deck-card .memory-card p{font-size:.88rem;margin:0;color:#6d4a57;line-height:1.5;overflow-wrap:break-word;word-break:break-word}
+.deck-card .secret-card{padding:1.4rem 1.2rem;background:#fff;border:1px solid #f3c6d3;color:var(--ink);border-radius:18px;max-width:640px;margin:0 auto;width:100%;box-sizing:border-box}
+.deck-card .secret-card p{line-height:1.6;overflow-wrap:break-word;word-break:break-word}
+.deck-card .secret-card .btn,.deck-card #btn-lovenote,.deck-card #btn-kiss{margin-top:.9rem;max-width:100%;white-space:normal}
 .finale-text{font-family:var(--font-letter);font-size:1.7rem;font-weight:600;color:#6d1030;line-height:1.4;margin:.4rem 0 1rem}
 .deck-card .controls{gap:.5rem}
 .deck-card .card-footer{padding:1rem .3rem .3rem}
 /* Dots + arrows */
-.deck-nav{display:flex;align-items:center;justify-content:center;gap:.9rem;padding:.7rem 1rem 1.1rem}
+.deck-nav{display:flex;align-items:center;justify-content:center;gap:.9rem;padding:.7rem 1rem 1.1rem;flex-wrap:wrap}
 .deck-arrow{width:46px;height:46px;border-radius:50%;border:none;background:#a4134a;color:#fff;font-size:1.6rem;line-height:1;cursor:pointer;box-shadow:0 6px 16px rgba(164,19,74,.4);transition:transform .15s}
 .deck-arrow:hover{background:#7d0e38;transform:scale(1.08)}
-.deck-dots{display:flex;gap:.55rem;align-items:center}
+.deck-dots{display:flex;gap:.55rem;align-items:center;flex-wrap:wrap;justify-content:center;max-width:100%}
 .deck-dots button{width:14px;height:14px;border-radius:50%;border:none;background:#f3c6d3;cursor:pointer;padding:0;transition:transform .25s cubic-bezier(.34,1.56,.64,1),background .25s;min-width:14px}
 .deck-dots button:hover{transform:scale(1.2)}
 .deck-dots button.active{background:#a4134a;transform:scale(1.4)}
-.love-card .letter-paper{opacity:1;transform:none;box-shadow:0 12px 30px rgba(164,19,74,.18)}
-.love-card .secret-card{background:#fff;border:1px solid #f3c6d3}
+.love-card .letter-paper:not(.readable){opacity:1;transform:none;box-shadow:0 12px 30px rgba(164,19,74,.18)}
 .love-card .counter-card{background:#a4134a;color:#fff;border:none;backdrop-filter:none;box-shadow:0 12px 30px rgba(164,19,74,.35)}
-.love-card .counter-label{color:#ffe3ec}
+.love-card .counter-label{color:#ffe3ec;line-height:1.6;overflow-wrap:break-word}
+.love-card .card-footer p{margin:.3rem 0;line-height:1.5;overflow-wrap:break-word}
 .love-card .counter-note{color:var(--gold)}
 .love-card .controls{justify-content:center}
-.love-card .card-footer{text-align:center;color:#9a6a7a;padding:1rem .5rem .5rem;font-size:.95rem}
-.love-card .card-footer .tiny{font-size:.8rem;opacity:.8}
+.love-card .card-footer{text-align:center;color:#7d4a5a;padding:1rem .5rem .5rem;font-size:.95rem}
+.love-card .card-footer .tiny{font-size:.8rem;opacity:1;color:#8a5a68}
 .skip-link{position:absolute;left:-999px;top:0;background:#fff;color:#000;padding:.7rem 1rem;z-index:999;border-radius:0 0 12px 0}
 .skip-link:focus{left:0}
 #petals-canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
@@ -112,8 +114,8 @@ body{
 .counter-note{font-family:var(--font-script);font-size:1.5rem;color:var(--gold);margin:.8rem 0 0}
 .love-card .counter-grid div{background:rgba(255,255,255,.18)}
 .love-card .counter-grid small{color:#ffe3ec}
-section{margin:2.5rem 0}
-section h2{font-family:var(--font-script);font-size:clamp(2rem,5vw,3rem);text-align:center;margin:0 0 .4rem;text-shadow:0 2px 16px rgba(0,0,0,.4)}
+#landing section{margin:0}
+#landing section h2{font-family:var(--font-script);font-size:clamp(2rem,5vw,3rem);text-align:center;margin:0 0 .4rem;text-shadow:0 2px 16px rgba(0,0,0,.4)}
 .section-sub,.hint{text-align:center;color:#ffd7e3;max-width:620px;margin:0 auto 1.4rem}
 code{background:rgba(0,0,0,.35);padding:.15rem .45rem;border-radius:8px;font-size:.9em}
 .envelope-section{text-align:center}
@@ -135,7 +137,8 @@ code{background:rgba(0,0,0,.35);padding:.15rem .45rem;border-radius:8px;font-siz
 @keyframes pulse{0%{transform:scale(.85);opacity:1}80%,100%{transform:scale(1.25);opacity:0}}
 .envelope.open .envelope-flap{transform:rotateX(178deg);z-index:1}
 .envelope.open .wax-seal{transform:translate(-50%,-50%) scale(0);opacity:0;pointer-events:none}
-.envelope.open .mini-letter,.envelope.open .envelope-letter{transform:translateX(-50%) translateY(-58%) scale(1);opacity:1;z-index:3}
+.envelope.open .mini-letter{transform:translateX(-50%) translateY(-58%) scale(1);opacity:0;z-index:2;pointer-events:none}
+.envelope.open .envelope-letter{transform:translateX(-50%) translateY(-58%) scale(1);opacity:1;z-index:3;text-align:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .envelope-status{font-family:var(--font-script);font-size:1.6rem;color:var(--gold);min-height:2rem}
 .controls{display:flex;flex-wrap:wrap;gap:.55rem;justify-content:center;margin-top:.9rem}
 .btn{background:#ffffff22;border:1px solid rgba(255,255,255,.28);color:#fff;padding:.7rem 1.1rem;border-radius:999px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.95rem;transition:transform .18s cubic-bezier(.34,1.56,.64,1),background .2s,box-shadow .2s;will-change:transform;-webkit-tap-highlight-color:transparent;touch-action:manipulation;min-height:44px}
@@ -144,8 +147,6 @@ code{background:rgba(0,0,0,.35);padding:.15rem .45rem;border-radius:8px;font-siz
 .btn:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 .btn.primary{background:linear-gradient(180deg,#ff5c8a,#d11a55);border-color:#ff8fab}
 .btn.small{font-size:.82rem;padding:.5rem .85rem;min-height:40px}
-.btn.primary{background:linear-gradient(180deg,#ff5c8a,#d11a55);border-color:#ff8fab}
-.btn.small{font-size:.85rem;padding:.5rem .9rem;color:var(--ink);background:#fff;border-color:#fff}
 .btn[aria-pressed="true"]{background:linear-gradient(180deg,#ffd166,#e8a93d);color:#4a2333;border-color:#fff}
 
 
@@ -158,49 +159,52 @@ code{background:rgba(0,0,0,.35);padding:.15rem .45rem;border-radius:8px;font-siz
 .memory-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem}
 .memory-card{background:var(--card);border:1px solid var(--card-border);border-radius:18px;padding:1.2rem;text-align:center;transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s}
 .memory-card:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 14px 30px rgba(164,19,74,.25)}
-.love-card .letter-paper{box-shadow:0 12px 30px rgba(164,19,74,.18)}
+.love-card .letter-paper:not(.readable){opacity:1;transform:none;box-shadow:0 12px 30px rgba(164,19,74,.18)}
 /* ---------- Photo memory cards (foodtrip / movies / fighting / travel) ---------- */
 .photo-card{text-align:center}
 .photo-frame{position:relative;margin:.4rem auto .6rem;max-width:420px;border-radius:18px;overflow:hidden;border:3px solid #fff;box-shadow:0 14px 34px rgba(164,19,74,.28);background:#ffe9ef}
 .photo-frame img{display:block;width:100%;height:min(38vh,300px);object-fit:cover;object-position:top center;background:#ffe9ef}
-.photo-fallback{display:flex;flex-direction:column;gap:.3rem;align-items:center;justify-content:center;min-height:220px;font-size:3rem;background:linear-gradient(180deg,#fff,#ffe3ec);color:#a4134a;padding:1.4rem}
-.photo-fallback small{font-size:.8rem;color:#9a6a7a;line-height:1.4}
+.photo-fallback{display:flex;flex-direction:column;gap:.3rem;align-items:center;justify-content:center;min-height:220px;font-size:3rem;background:linear-gradient(180deg,#fff,#ffe3ec);color:#a4134a;padding:1.4rem;line-height:1.25;overflow-wrap:break-word;word-break:break-word;text-align:center}
+.photo-fallback small{font-size:.8rem;color:#7d4a5a;line-height:1.5;overflow-wrap:break-word}
 .photo-bubble{position:absolute;top:.6rem;left:.6rem;margin:0;background:#fff;border-radius:999px;padding:.3rem .8rem;font-weight:800;font-size:.8rem;letter-spacing:.04em;color:#5b2b2b;box-shadow:0 6px 16px rgba(0,0,0,.2);border:2px solid #5b2b2b22}
 .photo-message{font-family:var(--font-letter);font-size:1.35rem;line-height:1.4;color:#6d2438;margin:.3rem auto .8rem;max-width:46ch}
 .photo-card .btn{margin-top:.2rem}
 .love-card .memory-card{background:#fff;border:1px solid #f3c6d3;color:var(--ink)}
-.love-card .secret-card{background:#fff;border:1px solid #f3c6d3}
+.deck-card .secret-card{background:#fff;border:1px solid #f3c6d3;color:var(--ink);border-radius:18px;padding:1.4rem 1.2rem;text-align:center;max-width:640px;margin:0 auto;width:100%;box-sizing:border-box}
 .love-card #secret-blur{background:#fbe4ea;color:#6d1030}
 .love-card code{background:#fbe4ea;color:#a4134a}
+.love-card .btn{background:#a4134a;border-color:#a4134a;color:#fff}
+.love-card .btn:hover{background:#7d0e38;box-shadow:0 8px 20px rgba(164,19,74,.35)}
+.love-card .btn.primary{background:linear-gradient(180deg,#ff5c8a,#d11a55);border-color:#a4134a;color:#fff}
 .love-card .controls .btn{background:#a4134a;border-color:#a4134a;color:#fff}
 .love-card .controls .btn:hover{background:#7d0e38}
 .love-card .controls .btn.primary{background:linear-gradient(180deg,#ff5c8a,#d11a55);border-color:#ff8fab}
 .love-card .controls .btn[aria-pressed="true"]{background:linear-gradient(180deg,#ffd166,#e8a93d);color:#4a2333;border-color:#a4134a}
-#secret-blur{filter:blur(8px);background:rgba(0,0,0,.25);padding:1rem;border-radius:14px;transition:filter .6s ease,background .6s ease;user-select:none}
-#secret-blur.unblurred{filter:blur(0);background:rgba(255,255,255,.12);user-select:text}
-#toast-stack{position:fixed;right:12px;bottom:12px;display:flex;flex-direction:column;gap:.6rem;z-index:100;max-width:min(320px,86vw)}
-.toast small{display:block;color:#a4134a}
-#kiss-overlay{position:fixed;inset:0;display:grid;place-items:center;pointer-events:none;opacity:0;z-index:90;transition:opacity .3s ease}
+#secret-blur{filter:blur(8px);background:rgba(0,0,0,.25);color:#fff;padding:1rem;border-radius:14px;transition:filter .6s ease,background .6s ease,color .6s ease;user-select:none;line-height:1.6;overflow-wrap:break-word;word-break:break-word}
+.love-card #secret-blur{background:#fbe4ea;color:#6d1030}
+.love-card #secret-blur.unblurred,.deck-card #secret-blur.unblurred,#secret-blur.unblurred{filter:blur(0);background:#fff;color:#4a2333;user-select:text}
+#toast-stack{position:fixed;right:12px;bottom:12px;display:flex;flex-direction:column;gap:.6rem;z-index:100;max-width:min(320px,86vw);pointer-events:none}
+#kiss-overlay{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;opacity:0;z-index:90;transition:opacity .3s ease;padding:1rem;box-sizing:border-box;text-align:center}
 #kiss-overlay.show{opacity:1}
 #kiss-mark{font-size:clamp(4rem,18vw,7rem);animation:kissPop 1.4s cubic-bezier(.22,1,.36,1) forwards;will-change:transform,opacity}
-@keyframes kissPop{0%{transform:scale(0);opacity:0}25%{transform:scale(1.3);opacity:1}100%{transform:scale(1) translateY(-18px);opacity:0}}
 footer{text-align:center;padding:2rem;color:#ffcad4}
 .burst{position:fixed;left:0;top:0;width:10px;height:10px;border-radius:50%;z-index:95;pointer-events:none;will-change:transform,opacity}
 @keyframes burstFly{to{transform:translate(var(--dx),var(--dy)) scale(0);opacity:0}}
 /* 💖 Exploding hearts from envelope — GPU-friendly, buttery */
 .heart-particle{position:fixed;left:0;top:0;z-index:96;pointer-events:none;filter:drop-shadow(0 6px 12px rgba(0,0,0,.35));will-change:transform,opacity}
 /* Toasts slide in softly */
-.toast{background:#fff;color:#6d1030;border-radius:16px;padding:.8rem 1rem;border:2px solid #ff8fab;box-shadow:0 10px 30px rgba(0,0,0,.4);animation:toastIn .35s cubic-bezier(.22,1,.36,1)}
+.toast{position:relative;background:#fff;color:#6d1030;border-radius:16px;padding:.8rem 1rem;border:2px solid #ff8fab;box-shadow:0 10px 30px rgba(0,0,0,.4);animation:toastIn .35s cubic-bezier(.22,1,.36,1);overflow-wrap:break-word;word-break:break-word;max-width:100%;box-sizing:border-box;pointer-events:auto}
+.toast small{display:block;color:#a4134a;overflow-wrap:break-word}
 @keyframes toastIn{from{transform:translateX(30px);opacity:0}to{transform:none;opacity:1}}
 @keyframes kissPop{0%{transform:scale(0) rotate(-12deg);opacity:0}30%{transform:scale(1.25) rotate(4deg);opacity:1}60%{transform:scale(1) rotate(0)}100%{transform:scale(1.05) translateY(-18px);opacity:0}}
-.letter-paper h2{font-size:2.8rem;color:#a4134a;margin:0}
-.letter-meta{color:#9a6a7a;font-style:italic}
-.letter-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+#landing .letter-paper h2{font-size:2.8rem;color:#a4134a;margin:0}
+#landing .letter-meta{color:#9a6a7a;font-style:italic}
+#landing .letter-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
 .tape{position:absolute;top:-14px;left:50%;transform:translateX(-50%) rotate(-3deg);width:140px;height:32px;background:rgba(255,209,102,.9);border-radius:4px}
 .memory-card .emoji{font-size:2.4rem;display:block}
-.secret-card{background:#ffffff14;border:1px solid var(--card-border);border-radius:var(--radius);padding:2rem 1.5rem;text-align:center;max-width:640px;margin:0 auto}
+#landing .secret-card{background:#ffffff14;border:1px solid var(--card-border);border-radius:var(--radius);padding:2rem 1.5rem;text-align:center;max-width:640px;margin:0 auto}
 .toast small{display:block;color:#a4134a}
-#kiss-text{position:absolute;margin-top:clamp(7rem,22vh,11rem);font-family:var(--font-script);font-size:clamp(2rem,8vw,3rem);color:#fff;text-shadow:0 4px 20px rgba(0,0,0,.5)}
+#kiss-text{position:relative;margin:.6rem 0 0;font-family:var(--font-script);font-size:clamp(2rem,8vw,3rem);color:#fff;text-shadow:0 4px 20px rgba(0,0,0,.5);line-height:1.2;text-align:center;overflow-wrap:break-word}
 /* ---------- Responsive: phones, small heights, landscape ---------- */
 @media (max-width:600px){
   .envelope{width:min(300px,86vw);height:210px}
@@ -211,9 +215,10 @@ footer{text-align:center;padding:2rem;color:#ffcad4}
   .signature{font-size:1.45rem}
   .counter-grid{grid-template-columns:repeat(2,1fr)}
   .controls .btn{flex:1 1 44%}
-  .deck-card{padding:.8rem .9rem 1.1rem}
+  .deck-card{padding:.8rem .9rem 2rem}
+  .deck-card .card-emoji{margin-top:1.2rem}
   .photo-frame img{height:min(32vh,240px)}
-  .photo-message{font-size:1.2rem}
+  .photo-message{font-size:1.2rem;line-height:1.55;overflow-wrap:break-word;word-break:break-word}
   .deck-card .memory-grid{grid-template-columns:repeat(2,1fr);gap:.55rem}
   .card-overlay{padding:.5rem}
   .love-card{width:96vw;border-radius:20px}
@@ -223,11 +228,11 @@ footer{text-align:center;padding:2rem;color:#ffcad4}
 @media (max-height:700px){
   #landing{gap:.1rem;padding:.5rem .75rem}
   .landing-hero h1{font-size:clamp(1.9rem,7vh,2.8rem)}
-  .envelope-scene{padding:.8rem 0 .3rem;min-height:230px}
+  .envelope-scene{padding:.8rem 0 .3rem;min-height:auto}
   .envelope{height:190px}
   .big-open{margin-top:.4rem;padding:.65rem 1.6rem !important;font-size:1rem !important}
   .envelope-status{font-size:1.3rem;min-height:1.6rem}
-  .deck-top{padding:.7rem .8rem 0}
+  .deck-top{padding:.7rem 3rem 0}
   .deck-title{font-size:clamp(1.6rem,5vh,2rem)}
 }
 @media (prefers-reduced-motion:reduce){
@@ -249,4 +254,4 @@ footer{text-align:center;padding:2rem;color:#ffcad4}
   .love-card{height:94vh;height:94dvh}
   .deck-card .memory-grid{grid-template-columns:repeat(3,1fr)}
 }
-@media print{body{background:#fff;color:#000;overflow:visible;height:auto}#landing,#toast-stack,#kiss-overlay,#hearts-bg,#sparkles-bg,#petals-canvas,.deck-nav,.card-close{display:none !important}.card-overlay{position:static;opacity:1;visibility:visible;background:none;padding:0}.love-card{width:100%;height:auto;transform:none;opacity:1;border:none;box-shadow:none;color:#000}.deck-track{transform:none !important;display:block}.deck-card{overflow:visible}}
+@media print{body{background:#fff;color:#000;overflow:visible;height:auto}#landing,#toast-stack,#kiss-overlay,#hearts-bg,#sparkles-bg,#petals-canvas,.deck-nav,.card-close{display:none !important}.card-overlay{position:static;opacity:1;visibility:visible;background:none;padding:0;overflow:visible}.love-card{width:100%;height:auto;max-height:none;transform:none;opacity:1;border:none;box-shadow:none;color:#000;overflow:visible}.deck{overflow:visible}.deck-track{transform:none !important;display:block}.deck-card{overflow:visible;height:auto}}
