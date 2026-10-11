@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="A romantic interactive anniversary love letter — open the envelope, read our story, and celebrate us." />
+<title>Happy Anniversary — For My Love</title>
+<link rel="stylesheet" href="./style.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💌</text></svg>" />
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to love letter</a>
+<canvas id="petals-canvas" aria-hidden="true"></canvas>
+<div id="hearts-bg" aria-hidden="true"></div>
+<div id="sparkles-bg" aria-hidden="true"></div>
+<div id="kiss-overlay" aria-hidden="true"><span id="kiss-mark">💋</span><span id="kiss-text">Mwah!</span></div>
+<div id="toast-stack" aria-live="polite" aria-atomic="false"></div>
+
+<header class="hero">
+<p class="eyebrow">✨ a little universe made for you ✨</p>
+<h1><span id="name-a">Aarav</span> <span class="amp">❤</span> <span id="name-b">Diya</span></h1>
+<p class="subtitle">Happy Anniversary, my love</p>
+<div class="counter-card" role="timer" aria-label="Anniversary counter">
+<p class="counter-label">Loving you for <span id="years-together"></span> • since <span id="anniv-date-label">June 14, 2021</span></p>
+<div class="counter-grid">
+<div><span id="c-days">0</span><small>days</small></div>
+<div><span id="c-hours">0</span><small>hours</small></div>
+<div><span id="c-mins">0</span><small>minutes</small></div>
+<div><span id="c-secs">0</span><small>seconds</small></div>
+</div>
+<p class="counter-note" id="counter-note">and every second still feels like magic</p>
+</div>
+</header>
+
+<main id="main">
+<section class="envelope-section" aria-labelledby="envelope-heading">
+<h2 id="envelope-heading">A letter, sealed with my heart</h2>
+<p class="hint" id="envelope-hint">Tap the <strong>heart wax seal</strong> to open your surprise — works with click, tap, or Enter key.</p>
+<div class="envelope-scene">
+<div class="envelope" id="envelope">
+<div class="envelope-back"></div>
+<div class="mini-letter" aria-hidden="true"><span>❤</span><i></i><i></i><i></i></div>
+<div class="envelope-letter" id="envelope-letter" aria-hidden="true">For you ❤</div>
+<div class="envelope-front"></div>
+<div class="envelope-flap"></div>
+<button class="wax-seal" id="seal-btn" aria-expanded="false" aria-controls="love-letter" aria-label="Open love letter sealed with heart">
+<span aria-hidden="true">❤</span>
+<span class="pulse-ring" aria-hidden="true"></span>
+</button>
+</div>
+</div>
+<p class="envelope-status" id="envelope-status" role="status">Sealed with love 💌</p>
+<div class="controls" role="toolbar" aria-label="Love letter controls">
+<button id="btn-open" class="btn primary">💌 Open Letter</button>
+<button id="btn-replay" class="btn">↻ Replay Typing</button>
+<button id="btn-lovenote" class="btn">💘 Pop Love Note</button>
+<button id="btn-secret" class="btn">🤫 Secret Message</button>
+<button id="btn-kiss" class="btn">💋 Send a Kiss</button>
+<button id="btn-music" class="btn" aria-pressed="false">🎵 Music: Off</button>
+<button id="btn-confetti" class="btn">✨ Sparkle Burst</button>
+</div>
+</section>
+
+<section class="letter-section" aria-labelledby="letter-heading">
+<article class="letter-paper" id="love-letter" aria-hidden="true" aria-labelledby="letter-heading">
+<div class="tape" aria-hidden="true"></div>
+<h2 id="letter-heading">My Dearest Love,</h2>
+<p class="letter-meta" id="letter-date">June 14th • Forever Yours</p>
+<div id="typed-letter" aria-live="polite"></div>
+<span class="caret" id="typing-caret" aria-hidden="true">▌</span>
+<div class="signature">Forever & always,<br /><span id="signature-name">— Aarav ❤</span></div>
+<div class="letter-actions">
+<button class="btn small" id="btn-print">🖨️ Print / Save PDF</button>
+<button class="btn small" id="btn-copy">📋 Copy Letter</button>
+</div>
+</article>
+</section>
+
+<section class="memories" aria-labelledby="memories-heading">
+<h2 id="memories-heading">Little pieces of us</h2>
+<p class="section-sub">Edit these in <code>script.js → CONFIG.memories</code> to make it yours.</p>
+<div class="memory-grid" id="memory-grid"></div>
+</section>
+
+<section class="secret-section" aria-labelledby="secret-heading">
+<h2 id="secret-heading">Psst… one more thing</h2>
+<div class="secret-card">
+<p id="secret-blur" class="blurred">You are my home, my adventure, my calm and my chaos — I choose you in every lifetime. Meet me under our stars tonight? I have a surprise… 💍✨</p>
+<button class="btn primary" id="btn-reveal">Reveal secret message 🤫</button>
+</div>
+</section>
+
+<section class="customize" aria-labelledby="custom-heading">
+<h2 id="custom-heading">Make it yours in 30 seconds</h2>
+<ol class="steps">
+<li>Open <code>script.js</code> and edit <code>CONFIG</code> — names, date, letter, secret.</li>
+<li>Keep files together: <code>index.html</code>, <code>style.css</code>, <code>script.js</code>.</li>
+<li>Push to GitHub → Settings → Pages → Deploy from branch. Done! See <code>README.md</code>.</li>
+</ol>
+</section>
+</main>
+
+<footer>
+<p>Made with ❤️ for <span id="foot-names">Aarav & Diya</span> • <span id="foot-year"></span></p>
+<p class="tiny">No autoplay. Music is optional & off by default. All effects respect reduced-motion.</p>
+</footer>
+<script src="./script.js" defer></script>
+</body>
+</html>
