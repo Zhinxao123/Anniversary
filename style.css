@@ -91,8 +91,16 @@ code{background:rgba(0,0,0,.35);padding:.15rem .45rem;border-radius:8px;font-siz
 #kiss-mark{font-size:7rem;animation:kissPop 1.4s ease forwards}
 @keyframes kissPop{0%{transform:scale(0);opacity:0}25%{transform:scale(1.3);opacity:1}100%{transform:scale(1) translateY(-18px);opacity:0}}
 footer{text-align:center;padding:2rem;color:#ffcad4}
-.burst{position:fixed;width:10px;height:10px;border-radius:50%;z-index:70;animation:burstFly 1s ease-out forwards}
+.burst{position:fixed;width:10px;height:10px;border-radius:50%;z-index:70;animation:burstFly 1s ease-out forwards;pointer-events:none}
 @keyframes burstFly{to{transform:translate(var(--dx),var(--dy)) scale(0);opacity:0}}
+/* 💖 Exploding hearts from envelope */
+.heart-particle{position:fixed;z-index:71;pointer-events:none;transform:translate(-50%,-50%);filter:drop-shadow(0 6px 12px rgba(0,0,0,.4));animation:heartFly ease-out forwards}
+@keyframes heartFly{
+  0%{transform:translate(-50%,-50%) scale(0) rotate(0deg);opacity:0}
+  12%{transform:translate(calc(-50% + var(--hdx)*.15),calc(-50% + var(--hdy)*.15)) scale(1.35) rotate(calc(var(--hrot)*.3));opacity:1}
+  55%{transform:translate(calc(-50% + var(--hdx)*.7),calc(-50% + var(--hdy)*.7)) scale(1) rotate(calc(var(--hrot)*.7));opacity:1}
+  100%{transform:translate(calc(-50% + var(--hdx)),calc(-50% + var(--hdy))) scale(.6) rotate(var(--hrot));opacity:0}
+}
 .letter-paper h2{font-size:2.8rem;color:#a4134a;margin:0}
 .letter-meta{color:#9a6a7a;font-style:italic}
 .letter-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}

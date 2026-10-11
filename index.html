@@ -38,7 +38,7 @@
 <main id="main">
 <section class="envelope-section" aria-labelledby="envelope-heading">
 <h2 id="envelope-heading">A letter, sealed with my heart</h2>
-<p class="hint" id="envelope-hint">Tap the <strong>heart wax seal</strong> to open your surprise — works with click, tap, or Enter key.</p>
+<p class="hint" id="envelope-hint">Tap the <strong>heart wax seal</strong> — hearts will burst & music will play 💖 — works with click, tap, or Enter key.</p>
 <div class="envelope-scene">
 <div class="envelope" id="envelope">
 <div class="envelope-back"></div>
@@ -53,6 +53,11 @@
 </div>
 </div>
 <p class="envelope-status" id="envelope-status" role="status">Sealed with love 💌</p>
+<audio id="romantic-music" loop preload="auto">
+  <!-- 💖 OPTIONAL: add your own song. Put music.mp3 next to index.html, then uncomment:
+  <source src="./music.mp3" type="audio/mpeg" />
+  -->
+</audio>
 <div class="controls" role="toolbar" aria-label="Love letter controls">
 <button id="btn-open" class="btn primary">💌 Open Letter</button>
 <button id="btn-replay" class="btn">↻ Replay Typing</button>
@@ -105,7 +110,7 @@
 
 <footer>
 <p>Made with ❤️ for <span id="foot-names">Aarav & Diya</span> • <span id="foot-year"></span></p>
-<p class="tiny">No autoplay. Music is optional & off by default. All effects respect reduced-motion.</p>
+<p class="tiny">Music auto-starts when you open the envelope 💖 (tap = allowed). Toggle it anytime. All effects respect reduced-motion.</p>
 </footer>
 <script src="./script.js" defer></script>
 </body>

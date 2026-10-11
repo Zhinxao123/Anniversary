@@ -61,8 +61,15 @@ function openEnvelope(){
   $("#love-letter").classList.add("revealed");
   $("#love-letter").setAttribute("aria-hidden","false");
   startTyping();
-  sparkleBurst(window.innerWidth/2, window.innerHeight/2);
-  showToast("💌 The seal is broken!", "Your letter is typing itself below…");
+  const c = envelopeCenter();
+  // 💥 Heart explosion from the envelope + sparkles
+  heartBurst(c.x, c.y, 42);
+  setTimeout(() => heartBurst(c.x, c.y - 20, 24), 350);
+  setTimeout(() => heartBurst(c.x, c.y - 40, 18), 750);
+  sparkleBurst(c.x, c.y);
+  // 🎵 Auto-play music (user clicked/tapped, so browsers allow it)
+  autoStartMusic();
+  showToast("💌 The seal is broken!", "Hearts burst + our song begins…");
   setTimeout(()=>$("#love-letter").scrollIntoView({behavior:reduceMotion?"auto":"smooth",block:"center"}),900);
 }
 function resetEnvelope(){
@@ -115,7 +122,72 @@ function spawnHearts(){
     t.style.animationDelay=(Math.random()*3)+"s"; sp.appendChild(t);
   }
 }
-/* Falling rose petals canvas */
+/* Envelope heart burst — big romantic explosion on open */
+function heartBurst(x, y, count) {
+  if (reduceMotion) return;
+  count = count || 36;
+  const hearts = ["❤️", "💖", "💕", "💗", "💘", "❣️", "💓", "🥰"];
+  for (let i = 0; i < count; i++) {
+    const h = document.createElement("span");
+    h.className = "heart-particle";
+    h.setAttribute("aria-hidden", "true");
+    h.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+    h.style.left = x + "px";
+    h.style.top = y + "px";
+    h.style.fontSize = (16 + Math.random() * 28) + "px";
+    const angle = Math.random() * Math.PI * 2;
+    // Up-biased burst so hearts fountain out of the envelope
+    const dist = 90 + Math.random() * 260;
+    const dx = Math.cos(angle) * dist;
+    const dy = Math.sin(angle) * dist - 140 - Math.random() * 120;
+    const rot = (Math.random() * 160 - 80) + "deg";
+    const dur = (1.2 + Math.random() * 1.4) + "s";
+    h.style.setProperty("--hdx", dx + "px");
+    h.style.setProperty("--hdy", dy + "px");
+    h.style.setProperty("--hrot", rot);
+    h.style.animationDuration = dur;
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 2800);
+  }
+}
+
+function envelopeCenter() {
+  const env = $("#envelope");
+  if (env) {
+    const r = env.getBoundingClientRect();
+    return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+  }
+  return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+}
+
+/* Auto-play music on envelope open (allowed because open is a user gesture) */
+function autoStartMusic() {
+  const btn = $("#btn-music");
+  const audioEl = $("#romantic-music");
+  if (audioEl && audioEl.querySelector("source")) {
+    try {
+      audioEl.volume = 0.7;
+      const p = audioEl.play();
+      if (p && p.then) {
+        p.then(() => {
+          musicOn = true;
+          if (btn) { btn.textContent = "🎵 Music: On"; btn.setAttribute("aria-pressed", "true"); }
+          showToast("🎵 Music on", "Our song starts when your heart opens.");
+        }).catch(() => startLullabyMusic(btn));
+        return;
+      }
+    } catch (e) { /* fall through to lullaby */ }
+  }
+  startLullabyMusic(btn);
+}
+
+function startLullabyMusic(btn) {
+  if (musicOn) return;
+  musicOn = true;
+  if (btn) { btn.textContent = "🎵 Music: On"; btn.setAttribute("aria-pressed", "true"); }
+  playLullaby(btn, true);
+  showToast("🎵 Music on", "Our song starts when your heart opens.");
+}
 function startPetals(){
   const c=$("#petals-canvas"); const ctx=c.getContext("2d");
   function size(){ c.width=innerWidth; c.height=innerHeight; }
@@ -215,10 +287,29 @@ function playLullaby(btn, silent){
   }catch(e){ showToast("🎵 Audio blocked","Tap again to enable sound."); musicOn = false; }
 }
 function toggleMusic(btn){
-  if(!musicOn){ musicOn = true; btn.textContent = "🎵 Music: On"; btn.setAttribute("aria-pressed","true"); playLullaby(btn, false); }
+  const audioEl = $("#romantic-music");
+  const hasSong = audioEl && audioEl.querySelector("source");
+  if(!musicOn){
+    musicOn = true; btn.textContent = "🎵 Music: On"; btn.setAttribute("aria-pressed","true");
+    // Prefer real song file if present
+    if (hasSong) {
+      try {
+        audioEl.volume = 0.7;
+        const p = audioEl.play();
+        if (p && p.then) {
+          p.then(()=>{}).catch(()=> playLullaby(btn, true));
+          return;
+        }
+      } catch(e){}
+    }
+    playLullaby(btn, false);
+  }
   else {
     musicOn = false;
-    try{ musicNodes.forEach(function(n){ try{ n.stop(); }catch(e){} }); clearTimeout(musicNodes.loopTimer); }catch(e){}
+    try{
+      if (hasSong) audioEl.pause();
+      musicNodes.forEach(function(n){ try{ n.stop(); }catch(e){} }); clearTimeout(musicNodes.loopTimer);
+    }catch(e){}
     if(audioCtx) audioCtx.suspend();
     btn.textContent = "🎵 Music: Off"; btn.setAttribute("aria-pressed","false");
   }
