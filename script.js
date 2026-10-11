@@ -15,19 +15,34 @@ Thank you for your laugh that fixes bad days, for holding my hand through storms
 I promise to keep choosing you — in slow Sunday mornings, in silly fights, in big dreams. To love you louder, listen deeper, and dance with you in the kitchen forever.
 
 Happy anniversary, my love. Here's to us — past, present, and every lifetime after.`,
-  secretMessage: "Marjorie, you are my home, my adventure, my calm and my chaos — I choose you in every lifetime. Meet me under our stars tonight? I have a surprise… 💍✨",
+  secretMessage: "Marjorie, you are my home, my adventure, my calm and my chaos — I choose you in every lifetime. Meet me under our stars tonight? I have a surprise… ✨💖",
   memories: [
     { emoji: "🌙", title: "Late-night talks", text: "Where we solved the world, one whisper at a time." },
     { emoji: "🌧️", title: "That rainy walk", text: "Soaked, laughing, never wanting it to end." },
     { emoji: "🎬", title: "Movie nights", text: "You steal popcorn and my whole heart." },
-    { emoji: "💍", title: "Oct 16, 2026", text: "The day I celebrate you, my Marjorie. Always you." }
+    { emoji: "🌸", title: "Oct 16, 2026", text: "The day I celebrate you, my Marjorie. Always you." }
+  ],
+  reasons: [
+    { emoji: "😄", title: "Your laugh", text: "My favorite sound in the whole world." },
+    { emoji: "🤗", title: "Your warmth", text: "Every hug feels like coming home." },
+    { emoji: "💪", title: "Your strength", text: "You lift me higher than I ever could alone." },
+    { emoji: "🌟", title: "Your dreams", text: "Dreaming beside you is my greatest adventure." },
+    { emoji: "💖", title: "Your heart", text: "Kind, brave, and mine to cherish." },
+    { emoji: "🎶", title: "Your voice", text: "Even ordinary words sound like music." }
+  ],
+  promises: [
+    { emoji: "☕", title: "Morning coffee", text: "I will always make your cup first." },
+    { emoji: "👂", title: "Deep listening", text: "Your feelings first — always, no rushing." },
+    { emoji: "💃", title: "Kitchen dances", text: "Silly slow dances whenever the song hits." },
+    { emoji: "🌧️", title: "Through storms", text: "Hand in hand, no matter the weather." }
   ],
   loveNotes: [
     ["You + Me = Forever 💘", "No math ever felt this right."],
     ["You are my favorite hello 🌸", "And hardest goodbye, every single time."],
     ["Hug coupon inside 🤗", "Redeemable anytime, anywhere, unlimited."],
-    ["Warning: cute overload 🥰", "Caused entirely by thinking of you."],
-    ["You make ordinary magical ✨", "Even Mondays feel like festivals with you."]
+    ["You make ordinary magical ✨", "Even Mondays feel like festivals with you."],
+    ["Home is wherever you are 🏡", "And I never want to leave."],
+    ["Forever looks good on us 💖", "Past, present, and always."]
   ]
 };
 const $ = (s) => document.querySelector(s);
@@ -42,12 +57,17 @@ function applyConfig(){
   $("#foot-names").textContent = CONFIG.nameA + " & " + CONFIG.nameB;
   $("#foot-year").textContent = new Date().getFullYear();
   // years-together text is set by tickCounter() (countdown vs count-up aware)
-  const g=$("#memory-grid"); g.innerHTML="";
-  CONFIG.memories.forEach(m=>{
-    const d=document.createElement("div"); d.className="memory-card";
-    d.innerHTML="<span class='emoji'>"+m.emoji+"</span><h3></h3><p></p>";
-    d.querySelector("h3").textContent=m.title; d.querySelector("p").textContent=m.text; g.appendChild(d);
-  });
+  function renderCards(gridId, list){
+    const g=$("#"+gridId); if(!g) return; g.innerHTML="";
+    (list||[]).forEach(m=>{
+      const d=document.createElement("div"); d.className="memory-card";
+      d.innerHTML="<span class='emoji'>"+m.emoji+"</span><h3></h3><p></p>";
+      d.querySelector("h3").textContent=m.title; d.querySelector("p").textContent=m.text; g.appendChild(d);
+    });
+  }
+  renderCards("memory-grid", CONFIG.memories);
+  renderCards("reasons-grid", CONFIG.reasons);
+  renderCards("promises-grid", CONFIG.promises);
 }
 /* Envelope open -> pop the swipeable card deck */
 let opened=false;
@@ -74,10 +94,10 @@ function openEnvelope(){
   $("#love-letter").setAttribute("aria-hidden","false");
   startTyping();
   const c = envelopeCenter();
-  // 💥 Heart explosion from the envelope + sparkles
-  heartBurst(c.x, c.y, 42);
-  setTimeout(() => heartBurst(c.x, c.y - 20, 24), 350);
-  setTimeout(() => heartBurst(c.x, c.y - 40, 18), 750);
+  // 💥 Heart explosion from the envelope + sparkles (staggered, capped for smoothness)
+  heartBurst(c.x, c.y, 34);
+  setTimeout(() => heartBurst(c.x, c.y - 20, 22), 320);
+  setTimeout(() => heartBurst(c.x, c.y - 40, 16), 700);
   sparkleBurst(c.x, c.y);
   // 🎵 Auto-play music (user clicked/tapped, so browsers allow it)
   autoStartMusic();
@@ -91,18 +111,20 @@ function resetEnvelope(){
   $("#seal-btn").setAttribute("aria-expanded","false");
   $("#envelope-status").textContent="Sealed with love 💌";
 }
-/* Typing animation — restarts cleanly, letter card auto-scrolls to top */
+/* Typing animation — chunked per frame for butter-smooth typing */
 let typeTimer=null;
 function startTyping(){
   const box=$("#typed-letter"), caret=$("#typing-caret");
   if(!box) return;
-  clearInterval(typeTimer); box.textContent=""; if(caret) caret.classList.remove("done");
+  cancelAnimationFrame(typeTimer); box.textContent=""; if(caret) caret.classList.remove("done");
   if(reduceMotion){ box.textContent=CONFIG.letterText; if(caret) caret.classList.add("done"); return; }
-  let i=0; const txt=CONFIG.letterText;
-  typeTimer=setInterval(()=>{
-    box.textContent=txt.slice(0,++i);
-    if(i>=txt.length){ clearInterval(typeTimer); if(caret) caret.classList.add("done"); }
-  },22);
+  const txt=CONFIG.letterText; let i=0, last=performance.now();
+  const step=(now)=>{
+    if(now-last>24){ box.textContent=txt.slice(0,i+=2); last=now; }
+    if(i<txt.length){ typeTimer=requestAnimationFrame(step); }
+    else { box.textContent=txt; if(caret) caret.classList.add("done"); }
+  };
+  typeTimer=requestAnimationFrame(step);
 }
 /* Anniversary live counter — counts DOWN if date is in the future 💖 */
 function tickCounter(){
@@ -133,53 +155,64 @@ function tickCounter(){
     : ["and every second still feels like magic","still falling for you daily","my favorite forever countdown","home is wherever you are"];
   $("#counter-note").textContent=notes[d%notes.length];
 }
-/* Floating hearts + sparkles */
+/* Floating hearts + sparkles — capped counts, pause offscreen for smoothness */
 function spawnHearts(){
   if(reduceMotion) return;
   const bg=$("#hearts-bg"); const hearts=["❤️","💖","💕","💗","❣️"];
+  const maxHearts = window.innerWidth < 600 ? 10 : 18;
   setInterval(()=>{
     if(document.hidden) return;
+    if(bg.childElementCount >= maxHearts) return;
     const s=document.createElement("span");
     s.textContent=hearts[Math.floor(Math.random()*hearts.length)];
     s.style.left=Math.random()*100+"vw"; s.style.fontSize=(12+Math.random()*22)+"px";
     s.style.animationDuration=(6+Math.random()*6)+"s";
     bg.appendChild(s); setTimeout(()=>s.remove(),12000);
-  },1400);
+  },1500);
   const sp=$("#sparkles-bg");
-  for(let i=0;i<28;i++){
+  const nSpark = window.innerWidth < 600 ? 16 : 26;
+  for(let i=0;i<nSpark;i++){
     const t=document.createElement("span"); t.textContent="✦";
     t.style.left=Math.random()*100+"vw"; t.style.top=Math.random()*100+"vh";
     t.style.fontSize=(8+Math.random()*14)+"px";
-    t.style.animationDuration=(2+Math.random()*3)+"s";
+    t.style.animationDuration=(2.4+Math.random()*3)+"s";
     t.style.animationDelay=(Math.random()*3)+"s"; sp.appendChild(t);
   }
 }
-/* Envelope heart burst — big romantic explosion on open */
+/* Envelope heart burst — smooth Web Animations API, GPU-friendly, capped for perf */
 function heartBurst(x, y, count) {
   if (reduceMotion) return;
-  count = count || 36;
+  count = Math.min(count || 30, 40);
   const hearts = ["❤️", "💖", "💕", "💗", "💘", "❣️", "💓", "🥰"];
+  const vw = window.innerWidth, vh = window.innerHeight;
   for (let i = 0; i < count; i++) {
     const h = document.createElement("span");
     h.className = "heart-particle";
     h.setAttribute("aria-hidden", "true");
-    h.textContent = hearts[Math.floor(Math.random() * hearts.length)];
-    h.style.left = x + "px";
-    h.style.top = y + "px";
-    h.style.fontSize = (16 + Math.random() * 28) + "px";
-    const angle = Math.random() * Math.PI * 2;
-    // Up-biased burst so hearts fountain out of the envelope
-    const dist = 90 + Math.random() * 260;
-    const dx = Math.cos(angle) * dist;
-    const dy = Math.sin(angle) * dist - 140 - Math.random() * 120;
-    const rot = (Math.random() * 160 - 80) + "deg";
-    const dur = (1.2 + Math.random() * 1.4) + "s";
-    h.style.setProperty("--hdx", dx + "px");
-    h.style.setProperty("--hdy", dy + "px");
-    h.style.setProperty("--hrot", rot);
-    h.style.animationDuration = dur;
+    h.textContent = hearts[(Math.random() * hearts.length) | 0];
+    const size = 16 + Math.random() * 26;
+    h.style.fontSize = size + "px";
+    h.style.transform = "translate(" + x + "px," + y + "px) translate(-50%,-50%) scale(0)";
+    h.style.opacity = "0";
     document.body.appendChild(h);
-    setTimeout(() => h.remove(), 2800);
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 80 + Math.random() * 220;
+    const dx = Math.cos(angle) * dist;
+    const dy = Math.sin(angle) * dist - 130 - Math.random() * 110;
+    const rot = (Math.random() * 140 - 70);
+    const dur = 1300 + Math.random() * 1200;
+    // Clamp so hearts stay mostly on-screen
+    const endX = Math.max(-40, Math.min(vw + 40, x + dx));
+    const endY = Math.max(-60, Math.min(vh + 60, y + dy));
+    try {
+      const anim = h.animate([
+        { transform: "translate(" + x + "px," + y + "px) translate(-50%,-50%) scale(0) rotate(0deg)", opacity: 0 },
+        { transform: "translate(" + (x + dx * .18) + "px," + (y + dy * .18) + "px) translate(-50%,-50%) scale(1.35) rotate(" + (rot * .3) + "deg)", opacity: 1, offset: .18 },
+        { transform: "translate(" + endX + "px," + endY + "px) translate(-50%,-50%) scale(.6) rotate(" + rot + "deg)", opacity: 0 }
+      ], { duration: dur, easing: "cubic-bezier(.22,1,.36,1)", fill: "forwards" });
+      anim.onfinish = () => h.remove();
+      setTimeout(() => h.remove(), dur + 300);
+    } catch (e) { setTimeout(() => h.remove(), 100); }
   }
 }
 
@@ -280,18 +313,27 @@ function sendKiss(){
   setTimeout(()=>{ o.classList.remove("show"); kissing=false; },1450);
   showToast("💋 Kiss sent!","Caught it? Here is another one.");
 }
-/* Sparkle burst (no libs) */
+/* Sparkle burst — smooth WAAPI, capped count */
 function sparkleBurst(x,y){
   if(reduceMotion) return;
   const colors=["#ff4d7e","#ffd166","#ff8fab","#ffffff","#ffb3c6"];
-  for(let i=0;i<26;i++){
+  const n = window.innerWidth < 600 ? 16 : 24;
+  for(let i=0;i<n;i++){
     const d=document.createElement("div"); d.className="burst";
-    d.style.left=x+"px"; d.style.top=y+"px";
     d.style.background=colors[i%colors.length];
-    const a=Math.random()*Math.PI*2, dist=60+Math.random()*140;
-    d.style.setProperty("--dx",Math.cos(a)*dist+"px");
-    d.style.setProperty("--dy",Math.sin(a)*dist+"px");
-    document.body.appendChild(d); setTimeout(()=>d.remove(),1050);
+    d.style.transform="translate("+x+"px,"+y+"px) scale(1)";
+    d.style.opacity="1";
+    document.body.appendChild(d);
+    const a=Math.random()*Math.PI*2, dist=60+Math.random()*130;
+    const dx=Math.cos(a)*dist, dy=Math.sin(a)*dist;
+    try{
+      const anim=d.animate([
+        { transform:"translate("+x+"px,"+y+"px) scale(1)", opacity:1 },
+        { transform:"translate("+(x+dx)+"px,"+(y+dy)+"px) scale(0)", opacity:0 }
+      ],{ duration:700+Math.random()*400, easing:"cubic-bezier(.22,1,.36,1)", fill:"forwards" });
+      anim.onfinish=()=>d.remove();
+      setTimeout(()=>d.remove(),1300);
+    }catch(e){ setTimeout(()=>d.remove(),100); }
   }
 }
 /* Optional music — WebAudio lullaby, OFF by default, never autoplay */
@@ -374,21 +416,29 @@ function initDeck() {
   goDeck(0);
   $("#deck-prev").addEventListener("click", () => goDeck(deckIdx - 1));
   $("#deck-next").addEventListener("click", () => goDeck(deckIdx + 1));
-  // Touch / mouse drag to swipe
-  let startX = 0, curX = 0, dragging = false;
-  const threshold = 50;
-  function onStart(x) { dragging = true; startX = x; curX = x; track.classList.add("dragging"); }
+  // Touch / mouse drag to swipe — velocity-aware, buttery snap
+  let startX = 0, curX = 0, startT = 0, dragging = false;
+  const threshold = 48;
+  function onStart(x) {
+    dragging = true; startX = x; curX = x; startT = performance.now();
+    track.classList.add("dragging");
+  }
   function onMove(x) {
     if (!dragging) return; curX = x;
     const dx = curX - startX;
+    // Soft resistance at the ends so it never feels stuck
+    let eased = dx;
+    if ((deckIdx === 0 && dx > 0) || (deckIdx === deckCount() - 1 && dx < 0)) eased = dx * .35;
     const base = -(deckIdx * deck.clientWidth);
-    track.style.transform = "translateX(" + (base + dx) + "px)";
+    track.style.transform = "translateX(" + (base + eased) + "px)";
   }
   function onEnd() {
     if (!dragging) return; dragging = false; track.classList.remove("dragging");
     const dx = curX - startX;
-    if (dx < -threshold) goDeck(deckIdx + 1);
-    else if (dx > threshold) goDeck(deckIdx - 1);
+    const dt = Math.max(1, performance.now() - startT);
+    const velocity = dx / dt; // px per ms — fast flicks switch cards
+    if (dx < -threshold || velocity < -0.45) goDeck(deckIdx + 1);
+    else if (dx > threshold || velocity > 0.45) goDeck(deckIdx - 1);
     else goDeck(deckIdx);
   }
   deck.addEventListener("touchstart", (e) => onStart(e.touches[0].clientX), { passive: true });
@@ -415,7 +465,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   $("#card-overlay").addEventListener("click",(e)=>{ if(e.target.id==="card-overlay") hideCard(); });
   $("#btn-replay").addEventListener("click",()=>{ if(!opened) openEnvelope(); else { goDeck(1); startTyping(); } });
   $("#btn-lovenote").addEventListener("click",popLoveNote);
-  $("#btn-secret").addEventListener("click",()=>{ goDeck(3); setTimeout(revealSecret, 450); });
+  $("#btn-secret").addEventListener("click",()=>{ goDeck(5); setTimeout(revealSecret, 450); });
   $("#btn-reveal").addEventListener("click",revealSecret);
   $("#btn-kiss").addEventListener("click",sendKiss);
   $("#btn-confetti").addEventListener("click",(e)=>{ const r=e.target.getBoundingClientRect(); sparkleBurst(r.left+r.width/2,r.top); showToast("✨ Sparkles!","The universe is blushing."); });

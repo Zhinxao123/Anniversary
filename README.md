@@ -54,14 +54,17 @@ To update: edit `script.js` CONFIG, commit + push — Pages redeploys automatica
 
 ## Features checklist (all working, test before sending!)
 - [ ] Click / tap / Enter on **heart wax seal** → envelope 3D flap opens
-- [ ] Handwritten letter **typing animation** + Replay button
-- [ ] **Anniversary counter** (days/hours/mins/secs, live)
+- [ ] **Hearts burst** from envelope + sparkles, music auto-plays
+- [ ] Swipeable **7-card deck**: countdown → love letter → memories → reasons → promises → secret → finale
+- [ ] Swipe via touch, mouse-drag, arrows, dots, or ← → keys
+- [ ] Love letter in readable **Caveat** font with typing animation + Replay
+- [ ] **Anniversary countdown** to Oct 16, 2026 (auto flips to count-up after)
 - [ ] Floating hearts, twinkling sparkles, falling rose petals (canvas)
 - [ ] **Pop Love Note** playful toasts, **Secret Message** blur reveal
 - [ ] **Send a Kiss** 💋 fullscreen animation (also press `K`)
-- [ ] **Music toggle** — optional WebAudio lullaby, OFF by default, never autoplay
+- [ ] **Music toggle** — optional WebAudio lullaby + `music.mp3` support
 - [ ] Print / Save PDF + Copy Letter buttons
-- [ ] Responsive mobile layout, keyboard focus, `prefers-reduced-motion` support
+- [ ] Responsive: phones, small heights, landscape + `prefers-reduced-motion` support
 
 ## Accessibility + mobile notes
 - Semantic landmarks, skip-link, aria-expanded/status/live regions.
