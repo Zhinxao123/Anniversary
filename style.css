@@ -159,6 +159,15 @@ code{background:rgba(0,0,0,.35);padding:.15rem .45rem;border-radius:8px;font-siz
 .memory-card{background:var(--card);border:1px solid var(--card-border);border-radius:18px;padding:1.2rem;text-align:center;transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s}
 .memory-card:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 14px 30px rgba(164,19,74,.25)}
 .love-card .letter-paper{box-shadow:0 12px 30px rgba(164,19,74,.18)}
+/* ---------- Photo memory cards (foodtrip / movies / fighting / travel) ---------- */
+.photo-card{text-align:center}
+.photo-frame{position:relative;margin:.4rem auto .6rem;max-width:420px;border-radius:18px;overflow:hidden;border:3px solid #fff;box-shadow:0 14px 34px rgba(164,19,74,.28);background:#ffe9ef}
+.photo-frame img{display:block;width:100%;height:min(38vh,300px);object-fit:cover;object-position:top center;background:#ffe9ef}
+.photo-fallback{display:flex;flex-direction:column;gap:.3rem;align-items:center;justify-content:center;min-height:220px;font-size:3rem;background:linear-gradient(180deg,#fff,#ffe3ec);color:#a4134a;padding:1.4rem}
+.photo-fallback small{font-size:.8rem;color:#9a6a7a;line-height:1.4}
+.photo-bubble{position:absolute;top:.6rem;left:.6rem;margin:0;background:#fff;border-radius:999px;padding:.3rem .8rem;font-weight:800;font-size:.8rem;letter-spacing:.04em;color:#5b2b2b;box-shadow:0 6px 16px rgba(0,0,0,.2);border:2px solid #5b2b2b22}
+.photo-message{font-family:var(--font-letter);font-size:1.35rem;line-height:1.4;color:#6d2438;margin:.3rem auto .8rem;max-width:46ch}
+.photo-card .btn{margin-top:.2rem}
 .love-card .memory-card{background:#fff;border:1px solid #f3c6d3;color:var(--ink)}
 .love-card .secret-card{background:#fff;border:1px solid #f3c6d3}
 .love-card #secret-blur{background:#fbe4ea;color:#6d1030}
@@ -203,6 +212,8 @@ footer{text-align:center;padding:2rem;color:#ffcad4}
   .counter-grid{grid-template-columns:repeat(2,1fr)}
   .controls .btn{flex:1 1 44%}
   .deck-card{padding:.8rem .9rem 1.1rem}
+  .photo-frame img{height:min(32vh,240px)}
+  .photo-message{font-size:1.2rem}
   .deck-card .memory-grid{grid-template-columns:repeat(2,1fr);gap:.55rem}
   .card-overlay{padding:.5rem}
   .love-card{width:96vw;border-radius:20px}

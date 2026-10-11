@@ -16,12 +16,6 @@ I promise to keep choosing you — in slow Sunday mornings, in silly fights, in 
 
 Happy anniversary, my love. Here's to us — past, present, and every lifetime after.`,
   secretMessage: "Marjorie, you are my home, my adventure, my calm and my chaos — I choose you in every lifetime. Meet me under our stars tonight? I have a surprise… ✨💖",
-  memories: [
-    { emoji: "🌙", title: "Late-night talks", text: "Where we solved the world, one whisper at a time." },
-    { emoji: "🌧️", title: "That rainy walk", text: "Soaked, laughing, never wanting it to end." },
-    { emoji: "🎬", title: "Movie nights", text: "You steal popcorn and my whole heart." },
-    { emoji: "🌸", title: "Oct 16, 2026", text: "The day I celebrate you, my Marjorie. Always you." }
-  ],
   reasons: [
     { emoji: "😄", title: "Your laugh", text: "My favorite sound in the whole world." },
     { emoji: "🤗", title: "Your warmth", text: "Every hug feels like coming home." },
@@ -65,8 +59,7 @@ function applyConfig(){
       d.querySelector("h3").textContent=m.title; d.querySelector("p").textContent=m.text; g.appendChild(d);
     });
   }
-  renderCards("memory-grid", CONFIG.memories);
-  renderCards("reasons-grid", CONFIG.reasons);
+  renderCards("reasons-grid", CONFIG.reasons); /* photo memories are now 4 static HTML cards */
   renderCards("promises-grid", CONFIG.promises);
 }
 /* Envelope open -> pop the swipeable card deck */
@@ -489,7 +482,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   $("#card-overlay").addEventListener("click",(e)=>{ if(e.target.id==="card-overlay") hideCard(); });
   $("#btn-replay").addEventListener("click",()=>{ if(!opened) openEnvelope(); else { goDeck(1); startTyping(true); } });
   $("#btn-lovenote").addEventListener("click",popLoveNote);
-  $("#btn-secret").addEventListener("click",()=>{ goDeck(5); setTimeout(revealSecret, 450); });
+  $("#btn-secret").addEventListener("click",()=>{ goDeck(8); setTimeout(revealSecret, 450); });
   $("#btn-reveal").addEventListener("click",revealSecret);
   $("#btn-kiss").addEventListener("click",sendKiss);
   $("#btn-confetti").addEventListener("click",(e)=>{ const r=e.target.getBoundingClientRect(); sparkleBurst(r.left+r.width/2,r.top); showToast("✨ Sparkles!","The universe is blushing."); });
