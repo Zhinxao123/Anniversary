@@ -1,6 +1,6 @@
-# 💌 Happy Anniversary — Interactive Love Letter
+# 💌 Happy Anniversary — Justin ❤ Marjorie
 
-A complete romantic website built with **only HTML, CSS + vanilla JS**. No backend, no npm, no build tools, no paid APIs. Drop it on **GitHub Pages** in minutes.
+A romantic swipeable-card website built with **only HTML, CSS + vanilla JS**. Landing page = one sealed envelope → tap it → hearts burst, music plays, and a **swipeable card deck** pops up (no page scrolling).
 
 ## Folder structure
 ```
@@ -17,14 +17,14 @@ Open `script.js` → edit the `CONFIG` object at the top:
 
 ```js
 const CONFIG = {
-  nameA: "Aarav",
-  nameB: "Diya",
+  nameA: "Justin",
+  nameB: "Marjorie",
   anniversaryDate: "2026-10-16T00:00:00",
   anniversaryLabel: "October 16, 2026",
-  signature: "— Aarav ❤",
-  letterText: `My dearest Diya, ...`,
-  secretMessage: "Meet me under our stars tonight? ...",
-  memories: [ {emoji:"☕", title:"...", text:"..."} ],
+  signature: "— Justin ❤",
+  letterText: `My dearest Marjorie, ...`,
+  secretMessage: "Marjorie, you are my home ...",
+  memories: [ {emoji:"🌙", title:"...", text:"..."} ],
   loveNotes: [ ["Title","subtitle"], ... ]
 };
 ```

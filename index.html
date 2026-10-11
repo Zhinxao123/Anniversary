@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="./style.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;500;600;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💌</text></svg>" />
 </head>
 <body>
@@ -22,13 +22,13 @@
 <main id="landing">
 <header class="landing-hero">
 <p class="eyebrow">✨ a little universe made for you ✨</p>
-<h1><span id="name-a">Aarav</span> <span class="amp">❤</span> <span id="name-b">Diya</span></h1>
-<p class="subtitle">Happy Anniversary, my love</p>
+<h1><span id="name-a">Justin</span> <span class="amp">❤</span> <span id="name-b">Marjorie</span></h1>
+<p class="subtitle">Happy Anniversary, Marjorie</p>
 </header>
 
 <section class="envelope-section" aria-labelledby="envelope-heading">
 <h2 id="envelope-heading">A letter, sealed with my heart</h2>
-<p class="hint" id="envelope-hint">Tap the <strong>heart wax seal</strong> 💖 — a card will pop up, hearts will burst & music will play.</p>
+<p class="hint" id="envelope-hint">Tap the <strong>heart wax seal</strong> 💖 — swipeable cards will pop up, hearts will burst & music will play.</p>
 <div class="envelope-scene">
 <div class="envelope" id="envelope">
 <div class="envelope-back"></div>
@@ -52,67 +52,96 @@
 </section>
 </main>
 
-<!-- 💌 Scrollable love card (pops up after envelope opens) -->
+<!-- 💌 Swipeable love card deck (pops up after envelope opens) -->
 <div class="card-overlay" id="card-overlay" aria-hidden="true">
-<article class="love-card" id="love-card" role="dialog" aria-modal="true" aria-labelledby="letter-heading">
+<article class="love-card" id="love-card" role="dialog" aria-modal="true" aria-label="Love cards for Marjorie">
 <button class="card-close" id="btn-close-card" aria-label="Close card">✕</button>
-<div class="love-card-scroll">
 
-<div class="counter-card" role="timer" aria-label="Anniversary counter">
-<p class="counter-label">Counting down to <span id="years-together"></span> • <span id="anniv-date-label">October 16, 2026</span></p>
-<div class="counter-grid">
-<div><span id="c-days">0</span><small>days</small></div>
-<div><span id="c-hours">0</span><small>hours</small></div>
-<div><span id="c-mins">0</span><small>minutes</small></div>
-<div><span id="c-secs">0</span><small>seconds</small></div>
-</div>
-<p class="counter-note" id="counter-note">and every second still feels like magic</p>
+<div class="deck-top">
+  <h2 class="deck-title">For Marjorie 💖</h2>
+  <p class="deck-swipe-hint">← swipe the cards →</p>
 </div>
 
-<div class="controls" role="toolbar" aria-label="Love letter controls">
-<button id="btn-replay" class="btn">↻ Replay Typing</button>
-<button id="btn-lovenote" class="btn">💘 Pop Love Note</button>
-<button id="btn-secret" class="btn">🤫 Secret Message</button>
-<button id="btn-kiss" class="btn">💋 Send a Kiss</button>
-<button id="btn-music" class="btn" aria-pressed="false">🎵 Music: Off</button>
-<button id="btn-confetti" class="btn">✨ Sparkle Burst</button>
+<div class="deck" id="deck" aria-roledescription="carousel" aria-label="Love cards — swipe left or right">
+  <div class="deck-track" id="deck-track">
+
+    <!-- CARD 1: countdown -->
+    <section class="deck-card" aria-roledescription="slide" aria-label="Card 1 of 5: countdown">
+      <p class="card-emoji">⏳💖</p>
+      <h3>Counting down to us</h3>
+      <div class="counter-card" role="timer" aria-label="Anniversary counter">
+        <p class="counter-label">Counting down to <span id="years-together"></span> • <span id="anniv-date-label">October 16, 2026</span></p>
+        <div class="counter-grid">
+          <div><span id="c-days">0</span><small>days</small></div>
+          <div><span id="c-hours">0</span><small>hours</small></div>
+          <div><span id="c-mins">0</span><small>minutes</small></div>
+          <div><span id="c-secs">0</span><small>seconds</small></div>
+        </div>
+        <p class="counter-note" id="counter-note">until I get to celebrate you</p>
+      </div>
+      <p class="tiny-note">Swipe → to read my letter</p>
+    </section>
+
+    <!-- CARD 2: love letter (readable!) -->
+    <section class="deck-card letter-card" aria-roledescription="slide" aria-label="Card 2 of 5: love letter">
+      <h3 id="letter-heading">My Dearest Marjorie,</h3>
+      <p class="letter-meta" id="letter-date">October 16th • Forever Yours</p>
+      <article class="letter-paper readable" id="love-letter" aria-hidden="true" aria-labelledby="letter-heading">
+        <div class="tape" aria-hidden="true"></div>
+        <div id="typed-letter" aria-live="polite"></div><span class="caret" id="typing-caret" aria-hidden="true">▌</span>
+        <div class="signature">Forever & always,<br /><span id="signature-name">— Justin ❤</span></div>
+      </article>
+      <div class="letter-actions">
+        <button class="btn small" id="btn-replay">↻ Replay</button>
+        <button class="btn small" id="btn-print">🖨️ Save PDF</button>
+        <button class="btn small" id="btn-copy">📋 Copy</button>
+      </div>
+    </section>
+
+    <!-- CARD 3: memories -->
+    <section class="deck-card" aria-roledescription="slide" aria-label="Card 3 of 5: memories">
+      <p class="card-emoji">📸</p>
+      <h3>Little pieces of us</h3>
+      <div class="memory-grid" id="memory-grid"></div>
+      <button class="btn" id="btn-lovenote">💘 Pop Love Note</button>
+    </section>
+
+    <!-- CARD 4: secret -->
+    <section class="deck-card" aria-roledescription="slide" aria-label="Card 4 of 5: secret">
+      <p class="card-emoji">🤫</p>
+      <h3>Psst… one more thing</h3>
+      <div class="secret-card">
+        <p id="secret-blur" class="blurred">Marjorie, you are my home…</p>
+        <button class="btn primary" id="btn-reveal">Reveal secret 🤫</button>
+      </div>
+      <button class="btn" id="btn-kiss">💋 Send a Kiss</button>
+    </section>
+
+    <!-- CARD 5: finale -->
+    <section class="deck-card finale" aria-roledescription="slide" aria-label="Card 5 of 5: forever">
+      <p class="card-emoji big">💍</p>
+      <h3>Justin ❤ Marjorie</h3>
+      <p class="finale-text">Here's to us — past, present,<br />and every lifetime after.</p>
+      <div class="controls" role="toolbar" aria-label="Love letter controls">
+        <button id="btn-secret" class="btn">🤫 Secret</button>
+        <button id="btn-music" class="btn" aria-pressed="false">🎵 Music: Off</button>
+        <button id="btn-confetti" class="btn">✨ Sparkles</button>
+      </div>
+      <footer class="card-footer">
+        <p>Made with ❤️ for <span id="foot-names">Justin & Marjorie</span> • <span id="foot-year"></span></p>
+        <p class="tiny">Music auto-starts when you open the envelope 💖</p>
+      </footer>
+    </section>
+
+  </div>
 </div>
 
-<section class="letter-section" aria-labelledby="letter-heading">
-<article class="letter-paper" id="love-letter" aria-hidden="true" aria-labelledby="letter-heading">
-<div class="tape" aria-hidden="true"></div>
-<h2 id="letter-heading">My Dearest Love,</h2>
-<p class="letter-meta" id="letter-date">October 16th • Forever Yours</p>
-<div id="typed-letter" aria-live="polite"></div>
-<span class="caret" id="typing-caret" aria-hidden="true">▌</span>
-<div class="signature">Forever & always,<br /><span id="signature-name">— Aarav ❤</span></div>
-<div class="letter-actions">
-<button class="btn small" id="btn-print">🖨️ Print / Save PDF</button>
-<button class="btn small" id="btn-copy">📋 Copy Letter</button>
+<div class="deck-nav">
+  <button class="deck-arrow" id="deck-prev" aria-label="Previous card">‹</button>
+  <div class="deck-dots" id="deck-dots" role="tablist" aria-label="Choose card"></div>
+  <button class="deck-arrow" id="deck-next" aria-label="Next card">›</button>
 </div>
-</article>
-</section>
 
-<section class="memories" aria-labelledby="memories-heading">
-<h2 id="memories-heading">Little pieces of us</h2>
-<p class="section-sub">Edit these in <code>script.js → CONFIG.memories</code> to make it yours.</p>
-<div class="memory-grid" id="memory-grid"></div>
-</section>
-
-<section class="secret-section" aria-labelledby="secret-heading">
-<h2 id="secret-heading">Psst… one more thing</h2>
-<div class="secret-card">
-<p id="secret-blur" class="blurred">You are my home, my adventure, my calm and my chaos — I choose you in every lifetime. Meet me under our stars tonight? I have a surprise… 💍✨</p>
-<button class="btn primary" id="btn-reveal">Reveal secret message 🤫</button>
-</div>
-</section>
-
-<footer class="card-footer">
-<p>Made with ❤️ for <span id="foot-names">Aarav & Diya</span> • <span id="foot-year"></span></p>
-<p class="tiny">Music auto-starts when you open the envelope 💖 Toggle it anytime.</p>
-</footer>
-
-</div><!-- /.love-card-scroll -->
 </article>
 </div>
 <script src="./script.js" defer></script>

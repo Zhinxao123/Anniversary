@@ -1,12 +1,12 @@
 /* CONFIG — EDIT ME! Personalize everything here */
 const CONFIG = {
-  nameA: "Aarav",
-  nameB: "Diya",
+  nameA: "Justin",
+  nameB: "Marjorie",
   anniversaryDate: "2026-10-16T00:00:00",
   anniversaryLabel: "October 16, 2026",
-  signature: "— Aarav ❤",
+  signature: "— Justin ❤",
   letterDate: "October 16th • Forever Yours",
-  letterText: `My dearest Diya,
+  letterText: `My dearest Marjorie,
 
 Another year, another chapter of us — and my heart still skips exactly the way it did on day one.
 
@@ -15,12 +15,12 @@ Thank you for your laugh that fixes bad days, for holding my hand through storms
 I promise to keep choosing you — in slow Sunday mornings, in silly fights, in big dreams. To love you louder, listen deeper, and dance with you in the kitchen forever.
 
 Happy anniversary, my love. Here's to us — past, present, and every lifetime after.`,
-  secretMessage: "You are my home, my adventure, my calm and my chaos — I choose you in every lifetime. Meet me under our stars tonight? I have a surprise… 💍✨",
+  secretMessage: "Marjorie, you are my home, my adventure, my calm and my chaos — I choose you in every lifetime. Meet me under our stars tonight? I have a surprise… 💍✨",
   memories: [
-    { emoji: "☕", title: "Chai & 2am talks", text: "Where we solved the world, one cup at a time." },
-    { emoji: "🌧️", title: "That rainy walk", text: "Soaked, laughing, and never wanting it to end." },
-    { emoji: "🎬", title: "Movie marathons", text: "You steal popcorn and my whole heart." },
-    { emoji: "✈️", title: "Dream trip", text: "Next stop: wherever you are. Always you." }
+    { emoji: "🌙", title: "Late-night talks", text: "Where we solved the world, one whisper at a time." },
+    { emoji: "🌧️", title: "That rainy walk", text: "Soaked, laughing, never wanting it to end." },
+    { emoji: "🎬", title: "Movie nights", text: "You steal popcorn and my whole heart." },
+    { emoji: "💍", title: "Oct 16, 2026", text: "The day I celebrate you, my Marjorie. Always you." }
   ],
   loveNotes: [
     ["You + Me = Forever 💘", "No math ever felt this right."],
@@ -49,13 +49,14 @@ function applyConfig(){
     d.querySelector("h3").textContent=m.title; d.querySelector("p").textContent=m.text; g.appendChild(d);
   });
 }
-/* Envelope open -> pop the scrollable love card */
+/* Envelope open -> pop the swipeable card deck */
 let opened=false;
 function showCard() {
   const overlay = $("#card-overlay");
   overlay.classList.add("show");
   overlay.setAttribute("aria-hidden", "false");
   $("#love-card").setAttribute("aria-hidden", "false");
+  goDeck(0); // always start at the countdown card 💖
 }
 function hideCard() {
   const overlay = $("#card-overlay");
@@ -81,7 +82,7 @@ function openEnvelope(){
   // 🎵 Auto-play music (user clicked/tapped, so browsers allow it)
   autoStartMusic();
   showToast("💌 The seal is broken!", "Hearts burst + our song begins…");
-  // Pop the scrollable card after the flap animation
+  // Pop the swipeable card deck after the flap animation
   setTimeout(showCard, 900);
 }
 function resetEnvelope(){
@@ -90,17 +91,18 @@ function resetEnvelope(){
   $("#seal-btn").setAttribute("aria-expanded","false");
   $("#envelope-status").textContent="Sealed with love 💌";
 }
-/* Typing animation */
+/* Typing animation — restarts cleanly, letter card auto-scrolls to top */
 let typeTimer=null;
 function startTyping(){
   const box=$("#typed-letter"), caret=$("#typing-caret");
-  clearInterval(typeTimer); box.textContent=""; caret.classList.remove("done");
-  if(reduceMotion){ box.textContent=CONFIG.letterText; caret.classList.add("done"); return; }
+  if(!box) return;
+  clearInterval(typeTimer); box.textContent=""; if(caret) caret.classList.remove("done");
+  if(reduceMotion){ box.textContent=CONFIG.letterText; if(caret) caret.classList.add("done"); return; }
   let i=0; const txt=CONFIG.letterText;
   typeTimer=setInterval(()=>{
     box.textContent=txt.slice(0,++i);
-    if(i>=txt.length){ clearInterval(typeTimer); caret.classList.add("done"); showToast("💖 Letter complete","Replay it anytime with ↻ button."); }
-  },38);
+    if(i>=txt.length){ clearInterval(typeTimer); if(caret) caret.classList.add("done"); }
+  },22);
 }
 /* Anniversary live counter — counts DOWN if date is in the future 💖 */
 function tickCounter(){
@@ -344,18 +346,76 @@ function toggleMusic(btn){
     btn.textContent = "🎵 Music: Off"; btn.setAttribute("aria-pressed","false");
   }
 }
+/* ---------- Swipeable deck: touch swipe + drag + dots + arrows ---------- */
+let deckIdx = 0;
+function deckCount() { return document.querySelectorAll("#deck-track .deck-card").length; }
+function goDeck(i) {
+  const n = deckCount(); if (!n) return;
+  deckIdx = Math.max(0, Math.min(n - 1, i));
+  const track = $("#deck-track");
+  track.style.transform = "translateX(-" + (deckIdx * 100) + "%)";
+  document.querySelectorAll("#deck-dots button").forEach((d, k) => {
+    d.classList.toggle("active", k === deckIdx);
+    d.setAttribute("aria-selected", k === deckIdx ? "true" : "false");
+  });
+  // Typing the letter feels magical when its card slides in
+  if (deckIdx === 1 && opened) startTyping();
+}
+function initDeck() {
+  const deck = $("#deck"), track = $("#deck-track"), dots = $("#deck-dots");
+  dots.innerHTML = "";
+  for (let i = 0; i < deckCount(); i++) {
+    const b = document.createElement("button");
+    b.setAttribute("role", "tab");
+    b.setAttribute("aria-label", "Go to card " + (i + 1));
+    b.addEventListener("click", () => goDeck(i));
+    dots.appendChild(b);
+  }
+  goDeck(0);
+  $("#deck-prev").addEventListener("click", () => goDeck(deckIdx - 1));
+  $("#deck-next").addEventListener("click", () => goDeck(deckIdx + 1));
+  // Touch / mouse drag to swipe
+  let startX = 0, curX = 0, dragging = false;
+  const threshold = 50;
+  function onStart(x) { dragging = true; startX = x; curX = x; track.classList.add("dragging"); }
+  function onMove(x) {
+    if (!dragging) return; curX = x;
+    const dx = curX - startX;
+    const base = -(deckIdx * deck.clientWidth);
+    track.style.transform = "translateX(" + (base + dx) + "px)";
+  }
+  function onEnd() {
+    if (!dragging) return; dragging = false; track.classList.remove("dragging");
+    const dx = curX - startX;
+    if (dx < -threshold) goDeck(deckIdx + 1);
+    else if (dx > threshold) goDeck(deckIdx - 1);
+    else goDeck(deckIdx);
+  }
+  deck.addEventListener("touchstart", (e) => onStart(e.touches[0].clientX), { passive: true });
+  deck.addEventListener("touchmove", (e) => onMove(e.touches[0].clientX), { passive: true });
+  deck.addEventListener("touchend", onEnd);
+  deck.addEventListener("mousedown", (e) => onStart(e.clientX));
+  window.addEventListener("mousemove", (e) => onMove(e.clientX));
+  window.addEventListener("mouseup", onEnd);
+  // Arrow keys swipe when card is open
+  document.addEventListener("keydown", (e) => {
+    if (!$("#card-overlay").classList.contains("show")) return;
+    if (e.key === "ArrowRight") goDeck(deckIdx + 1);
+    if (e.key === "ArrowLeft") goDeck(deckIdx - 1);
+  });
+}
 /* Wire everything + init */
 document.addEventListener("DOMContentLoaded",()=>{
   applyConfig(); tickCounter(); setInterval(tickCounter,1000);
-  spawnHearts(); startPetals();
+  spawnHearts(); startPetals(); initDeck();
   $("#seal-btn").addEventListener("click",openEnvelope);
   $("#btn-open").addEventListener("click",openEnvelope);
   $("#btn-close-card").addEventListener("click",hideCard);
   // Click dimmed backdrop to close, ESC too
   $("#card-overlay").addEventListener("click",(e)=>{ if(e.target.id==="card-overlay") hideCard(); });
-  $("#btn-replay").addEventListener("click",()=>{ if(!opened) openEnvelope(); else startTyping(); });
+  $("#btn-replay").addEventListener("click",()=>{ if(!opened) openEnvelope(); else { goDeck(1); startTyping(); } });
   $("#btn-lovenote").addEventListener("click",popLoveNote);
-  $("#btn-secret").addEventListener("click",()=>{ revealSecret(); const sc=$(".love-card-scroll"); const t=$("#secret-blur"); if(sc&&t) sc.scrollTo({top:t.offsetTop-120,behavior:reduceMotion?"auto":"smooth"}); });
+  $("#btn-secret").addEventListener("click",()=>{ goDeck(3); setTimeout(revealSecret, 450); });
   $("#btn-reveal").addEventListener("click",revealSecret);
   $("#btn-kiss").addEventListener("click",sendKiss);
   $("#btn-confetti").addEventListener("click",(e)=>{ const r=e.target.getBoundingClientRect(); sparkleBurst(r.left+r.width/2,r.top); showToast("✨ Sparkles!","The universe is blushing."); });
